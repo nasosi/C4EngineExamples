@@ -19,8 +19,8 @@ void MovementAction::HandleEngage( )
         auto camera = world->GetSpectatorCamera( );
         // We want to set the spectator flag of the particular action so that
         // the camera knows to move to the right direction when called by the
-        // engine. For example this will enable moving to the left as long
-        // as the "left" button is not Disengaged:
+        // engine. For example if spectatorFlag = kSpectatorMoveLeft this will 
+        // enable moving to the left as long as the "left" button is Engaged:
         camera->SetSpectatorFlags(camera->GetSpectatorFlags() | spectatorFlag);
     }
 }
