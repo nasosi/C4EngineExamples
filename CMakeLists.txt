@@ -1,6 +1,6 @@
 cmake_minimum_required ( VERSION 3.17 )
 
-project( C4EngineExamples VERSION 7.1.1 )
+project( C4EngineExamples VERSION 7.1.1.0 )
 
 include( cmake/cmake_macros/c4functions.cmake )
 
