@@ -2,11 +2,8 @@
 
 #include "StartWindow.hpp"
 
-StartWindow::StartWindow() :
-    Window( APPNAME "/Panel/SimpleStart" ),
-    startButtonObserver( this, &StartWindow::HandleStartButtonClick )
+StartWindow::StartWindow() : Window( APPNAME "/Panel/SimpleStart" ), startButtonObserver( this, &StartWindow::HandleStartButtonClick )
 {
-
 }
 
 void StartWindow::PreprocessWidget()
@@ -14,19 +11,19 @@ void StartWindow::PreprocessWidget()
 
     Window::PreprocessWidget();
 
-    auto button = FindWidget("StartButton");
+    auto button = FindWidget( "StartButton" );
     if ( button )
     {
-        button->SetObserver( &startButtonObserver) ;
+        button->SetObserver( &startButtonObserver );
     }
 }
 
-void StartWindow::HandleStartButtonClick(Widget *, const WidgetEventData *eventData)
+void StartWindow::HandleStartButtonClick( Widget*, const WidgetEventData* eventData )
 {
-    if (eventData->eventType == kEventWidgetActivate)
+    if ( eventData->eventType == kEventWidgetActivate )
     {
         this->HideWidget();
 
-        TheWorldMgr->LoadWorld(APPNAME "/World/simple");
+        TheWorldMgr->LoadWorld( APPNAME "/World/simple" );
     }
 }

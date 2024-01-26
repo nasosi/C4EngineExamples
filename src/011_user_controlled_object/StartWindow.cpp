@@ -1,17 +1,17 @@
-#include "C4World.h"
 #include "C4Engine.h"
+#include "C4World.h"
 
 #include "StartWindow.hpp"
 
 //#include <iostream>
 
-StartWindow::StartWindow( ) :
+StartWindow::StartWindow() :
     Window( APPNAME "/Panel/ImprovedStart" ),
-    startButtonObserver     ( this, &StartWindow::HandleStartButtonClick ),
-    continueButtonObserver  ( this, &StartWindow::HandleContinueButtonClick ),
-    QuitButtonObserver      ( this, &StartWindow::HandleQuitButtonClick )
-{
 
+    startButtonObserver( this, &StartWindow::HandleStartButtonClick ),
+    continueButtonObserver( this, &StartWindow::HandleContinueButtonClick ),
+    QuitButtonObserver( this, &StartWindow::HandleQuitButtonClick )
+{
 }
 
 void StartWindow::PreprocessWidget()
@@ -23,36 +23,33 @@ void StartWindow::PreprocessWidget()
     if ( Button )
     {
         Button->SetObserver( &startButtonObserver );
-
     }
 
     continueButton = FindWidget( "ContinueButton" );
     if ( continueButton )
     {
         continueButton->SetObserver( &continueButtonObserver );
-        continueButtonOriginalColor = continueButton->GetWidgetColor( );
+        continueButtonOriginalColor = continueButton->GetWidgetColor();
         continueButton->SetWidgetColor( continueButtonOriginalColor * 0.5 );
     }
-
 
     Button = FindWidget( "QuitButton" );
     if ( Button )
     {
         Button->SetObserver( &QuitButtonObserver );
     }
-
 }
 
-void StartWindow::HandleStartButtonClick( Widget */*widget*/, const WidgetEventData *eventData )
+void StartWindow::HandleStartButtonClick( Widget* /*widget*/, const WidgetEventData* eventData )
 {
     if ( eventData->eventType == kEventWidgetActivate )
     {
         this->HideWidget();
 
-        if( continueButton )
+        if ( continueButton )
         {
             continueButton->SetWidgetColor( continueButtonOriginalColor );
-            continueButton->SetWidgetState( continueButton->GetWidgetState() & (~kWidgetDisabled) );
+            continueButton->SetWidgetState( continueButton->GetWidgetState() & ( ~kWidgetDisabled ) );
         }
 
         if ( TheWorldMgr->GetWorld() == nullptr )
@@ -60,13 +57,13 @@ void StartWindow::HandleStartButtonClick( Widget */*widget*/, const WidgetEventD
             TheWorldMgr->LoadWorld( APPNAME "/World/011_user_controlled_object" );
         }
         else
-        {   // Reload the loaded world
-            TheWorldMgr->LoadWorld(  TheWorldMgr->GetWorld()->GetWorldName( ) );
+        { // Reload the loaded world
+            TheWorldMgr->LoadWorld( TheWorldMgr->GetWorld()->GetWorldName() );
         }
     }
 }
 
-void StartWindow::HandleContinueButtonClick( Widget */*widget*/, const WidgetEventData *eventData )
+void StartWindow::HandleContinueButtonClick( Widget* /*widget*/, const WidgetEventData* eventData )
 {
     if ( eventData->eventType == kEventWidgetActivate )
     {
@@ -74,7 +71,7 @@ void StartWindow::HandleContinueButtonClick( Widget */*widget*/, const WidgetEve
     }
 }
 
-void StartWindow::HandleQuitButtonClick( Widget */*widget*/, const WidgetEventData *eventData )
+void StartWindow::HandleQuitButtonClick( Widget*, const WidgetEventData* eventData )
 {
     if ( eventData->eventType == kEventWidgetActivate )
     {

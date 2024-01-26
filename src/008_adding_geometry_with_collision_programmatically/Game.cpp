@@ -3,23 +3,23 @@
 #include "Game.hpp"
 #include "World.hpp"
 
-C4_MODULE_EXPORT C4::Application * CreateApplication( )
+C4_MODULE_EXPORT C4::Application* CreateApplication()
 {
-    return new( Game );
+    return new ( Game );
 }
 
 Game::Game() :
-    stringTable( APPNAME "/Game/gameStrings"),
-    spectatorLocatorRegistar(kLocatorSpectator, stringTable.GetString(StringID('LOCA', kLocatorSpectator))),
+    stringTable( APPNAME "/Game/gameStrings" ),
+    spectatorLocatorRegistar( kLocatorSpectator, stringTable.GetString( StringID( 'LOCA', kLocatorSpectator ) ) ),
 
-    forwardAction   (kActionForward,    kSpectatorMoveForward ),
-    backwardAction  (kActionBackward,   kSpectatorMoveBackward) ,
-    leftAction      (kActionLeft,       kSpectatorMoveLeft ),
-    rightAction     (kActionRight,      kSpectatorMoveRight ),
-    upAction        (kActionUp,         kSpectatorMoveUp ),
-    downAction      (kActionDown,       kSpectatorMoveDown )
+    forwardAction( kActionForward, kSpectatorMoveForward ),
+    backwardAction( kActionBackward, kSpectatorMoveBackward ),
+    leftAction( kActionLeft, kSpectatorMoveLeft ),
+    rightAction( kActionRight, kSpectatorMoveRight ),
+    upAction( kActionUp, kSpectatorMoveUp ),
+    downAction( kActionDown, kSpectatorMoveDown )
 {
-    TheEngine->GetVariable("desktopColor")->SetValue("000000FF");
+    TheEngine->GetVariable( "desktopColor" )->SetValue( "000000FF" );
 
     TheInputMgr->AddAction( &forwardAction );
     TheInputMgr->AddAction( &backwardAction );
@@ -34,23 +34,23 @@ Game::Game() :
 
     TheInterfaceMgr->AddWidget( &startWin );
 
-    previousEscapeCallback  = TheInputMgr->GetEscapeCallback( );
-    previousEscapeCookie    = TheInputMgr->GetEscapeCookie( );
+    previousEscapeCallback = TheInputMgr->GetEscapeCallback();
+    previousEscapeCookie   = TheInputMgr->GetEscapeCookie();
     TheInputMgr->SetEscapeCallback( &HandleEscape, this );
 }
 
 Game::~Game()
 {
-    TheWorldMgr->UnloadWorld( );
+    TheWorldMgr->UnloadWorld();
 
     TheWorldMgr->SetWorldCreator( nullptr );
 
     TheInputMgr->SetEscapeCallback( previousEscapeCallback, previousEscapeCookie );
 }
 
-void Game::HandleEscape( void *cookie )
+void Game::HandleEscape( void* cookie )
 {
-    auto instance = static_cast<Game *>( cookie );
+    auto instance = static_cast<Game*>( cookie );
 
     if ( instance )
     {
@@ -58,7 +58,7 @@ void Game::HandleEscape( void *cookie )
     }
 }
 
-World *Game::CreateWorld( const char *name, void *cookie )
+World* Game::CreateWorld( const char* name, void* cookie )
 {
-    return ( new GameWorld(name) );
+    return ( new GameWorld( name ) );
 }

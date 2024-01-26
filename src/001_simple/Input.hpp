@@ -7,21 +7,21 @@ using namespace C4;
 
 enum : ActionType
 {
-    kActionForward = 'frwd',
+    kActionForward  = 'frwd',
     kActionBackward = 'bkwd',
-    kActionLeft = 'left',
-    kActionRight = 'rght',
-    kActionUp = 'jump',
-    kActionDown = 'down',
+    kActionLeft     = 'left',
+    kActionRight    = 'rght',
+    kActionUp       = 'jump',
+    kActionDown     = 'down',
 };
 
 class MovementAction : public Action
 {
 private:
-    uint32      spectatorFlag;
+    uint32 spectatorFlag;
 
 public:
-    MovementAction( ActionType type, uint32 specFlag);
+    MovementAction( ActionType type, uint32 specFlag );
     ~MovementAction();
 
     void HandleEngage();

@@ -12,27 +12,27 @@ using namespace C4;
 extern "C"
 {
     // Entry point, C4Engine Engine will call this function to create an instance of your application(game)
-    C4_MODULE_EXPORT C4::Application *CreateApplication( );
+    C4_MODULE_EXPORT C4::Application* CreateApplication();
 }
 
 enum : LocatorType
 {
-    kLocatorSpectator   = 'spec'
+    kLocatorSpectator = 'spec'
 };
 
 class Game : public Application
 {
 private:
-    StringTable         stringTable;
+    StringTable stringTable;
 
     LocatorRegistration spectatorLocatorRegistar;
 
-    MovementAction  forwardAction;
-    MovementAction  backwardAction;
-    MovementAction  leftAction;
-    MovementAction  rightAction;
-    MovementAction  upAction;
-    MovementAction  downAction;
+    MovementAction forwardAction;
+    MovementAction backwardAction;
+    MovementAction leftAction;
+    MovementAction rightAction;
+    MovementAction upAction;
+    MovementAction downAction;
 
 public:
     Game();
@@ -40,7 +40,7 @@ public:
 
     // Function to make the World Manager create an instance of our custom world
     // class(GameWorld) instead of the default, World class
-    static World *CreateWorld(const char *name, void *cookie);
+    static World* CreateWorld( const char* name, void* cookie );
 };
 
 #endif // GAME_HPP

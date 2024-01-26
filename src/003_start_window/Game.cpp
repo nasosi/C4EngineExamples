@@ -3,21 +3,22 @@
 #include "Game.hpp"
 #include "World.hpp"
 
-C4_MODULE_EXPORT C4::Application * CreateApplication( )
+C4_MODULE_EXPORT C4::Application* CreateApplication()
 {
-    return new( Game );
+    return new ( Game );
 }
 
 Game::Game() :
-    stringTable( APPNAME "/Game/gameStrings"),
-    spectatorLocatorRegistar(kLocatorSpectator, stringTable.GetString(StringID('LOCA', kLocatorSpectator))),
+    stringTable( APPNAME "/Game/gameStrings" ),
 
-    forwardAction   (kActionForward,    kSpectatorMoveForward ),
-    backwardAction  (kActionBackward,   kSpectatorMoveBackward) ,
-    leftAction      (kActionLeft,       kSpectatorMoveLeft ),
-    rightAction     (kActionRight,      kSpectatorMoveRight ),
-    upAction        (kActionUp,         kSpectatorMoveUp ),
-    downAction      (kActionDown,       kSpectatorMoveDown )
+    spectatorLocatorRegistar( kLocatorSpectator, stringTable.GetString( StringID( 'LOCA', kLocatorSpectator ) ) ),
+
+    forwardAction( kActionForward, kSpectatorMoveForward ),
+    backwardAction( kActionBackward, kSpectatorMoveBackward ),
+    leftAction( kActionLeft, kSpectatorMoveLeft ),
+    rightAction( kActionRight, kSpectatorMoveRight ),
+    upAction( kActionUp, kSpectatorMoveUp ),
+    downAction( kActionDown, kSpectatorMoveDown )
 {
 
     // Add mapped input actions to the Input Manager
@@ -37,12 +38,12 @@ Game::Game() :
 
 Game::~Game()
 {
-    TheWorldMgr->UnloadWorld( );
+    TheWorldMgr->UnloadWorld();
 
     TheWorldMgr->SetWorldCreator( nullptr );
 }
 
-World *Game::CreateWorld(const char *name, void *cookie)
+World* Game::CreateWorld( const char* name, void* cookie )
 {
-    return ( new GameWorld(name) );
+    return ( new GameWorld( name ) );
 }

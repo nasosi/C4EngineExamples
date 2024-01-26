@@ -1,18 +1,18 @@
 #include "BoxesGrid.hpp"
 
-#include "C4World.h"
 #include "C4Configuration.h"
+#include "C4World.h"
 
 using namespace C4;
 
-void addBoxesGridToTheWorld( World *world, float width, float spacing, float z_location )
+void addBoxesGridToTheWorld( World* world, float width, float spacing, float z_location )
 {
-    auto boxSize = Vector3D( width, width, width ) ;
-    for ( float x = -9; x < 9; x+= spacing )
+    auto boxSize = Vector3D( width, width, width );
+    for ( float x = -9; x < 9; x += spacing )
     {
-        for ( float y = -9; y < 9; y+= spacing )
+        for ( float y = -9; y < 9; y += spacing )
         {
-            for ( float z = -9; z < 9; z+= spacing )
+            for ( float z = -9; z < 9; z += spacing )
 
             {
                 // Create a box of size boxSize and position it

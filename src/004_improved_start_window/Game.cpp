@@ -3,21 +3,25 @@
 #include "Game.hpp"
 #include "World.hpp"
 
-C4_MODULE_EXPORT C4::Application * CreateApplication( )
+C4_MODULE_EXPORT C4::Application* CreateApplication()
 {
-    return new( Game );
+    return new ( Game );
 }
 
 Game::Game() :
-    stringTable("game/gameStrings"),
-    spectatorLocatorRegistar(kLocatorSpectator, stringTable.GetString(StringID('LOCA', kLocatorSpectator))),
+    stringTable( "game/gameStrings" )
 
-    forwardAction   (kActionForward,    kSpectatorMoveForward ),
-    backwardAction  (kActionBackward,   kSpectatorMoveBackward) ,
-    leftAction      (kActionLeft,       kSpectatorMoveLeft ),
-    rightAction     (kActionRight,      kSpectatorMoveRight ),
-    upAction        (kActionUp,         kSpectatorMoveUp ),
-    downAction      (kActionDown,       kSpectatorMoveDown )
+    ,
+    spectatorLocatorRegistar( kLocatorSpectator, stringTable.GetString( StringID( 'LOCA', kLocatorSpectator ) ) )
+
+    ,
+    forwardAction( kActionForward, kSpectatorMoveForward ),
+    backwardAction( kActionBackward, kSpectatorMoveBackward ),
+    leftAction( kActionLeft, kSpectatorMoveLeft ),
+    rightAction( kActionRight, kSpectatorMoveRight ),
+    upAction( kActionUp, kSpectatorMoveUp ),
+    downAction( kActionDown, kSpectatorMoveDown )
+
 {
     TheInputMgr->AddAction( &forwardAction );
     TheInputMgr->AddAction( &backwardAction );
@@ -34,15 +38,14 @@ Game::Game() :
 
     // We store the current escape process and cookie to assign it again when
     // we dont need it. We also se the escape process to our function
-    previousEscapeCallback = TheInputMgr->GetEscapeCallback( );
-    previousEscapeCookie = TheInputMgr->GetEscapeCookie( );
+    previousEscapeCallback = TheInputMgr->GetEscapeCallback();
+    previousEscapeCookie   = TheInputMgr->GetEscapeCookie();
     TheInputMgr->SetEscapeCallback( &HandleEscape, this );
-
 }
 
 Game::~Game()
 {
-    TheWorldMgr->UnloadWorld( );
+    TheWorldMgr->UnloadWorld();
 
     TheWorldMgr->SetWorldCreator( nullptr );
 
@@ -50,14 +53,14 @@ Game::~Game()
 }
 
 // We handle escape by showing the start window
-void Game::HandleEscape( void *cookie )
+void Game::HandleEscape( void* cookie )
 {
-    auto c = static_cast<Game *>( cookie );
+    auto c = static_cast<Game*>( cookie );
 
     c->startWin.ShowWidget();
 }
 
-World *Game::CreateWorld(const char *name, void *cookie)
+World* Game::CreateWorld( const char* name, void* cookie )
 {
-    return ( new GameWorld(name) );
+    return ( new GameWorld( name ) );
 }

@@ -12,35 +12,35 @@ using namespace C4;
 
 extern "C"
 {
-    C4_MODULE_EXPORT C4::Application *CreateApplication( );
+    C4_MODULE_EXPORT C4::Application* CreateApplication();
 }
 
 enum : LocatorType
 {
-    kLocatorSpectator   = 'spec'
+    kLocatorSpectator = 'spec'
 };
 
 class Game : public Application
 {
 private:
-    StringTable         stringTable;
+    StringTable stringTable;
 
     LocatorRegistration spectatorLocatorRegistar;
 
-    MovementAction  forwardAction;
-    MovementAction  backwardAction;
-    MovementAction  leftAction;
-    MovementAction  rightAction;
-    MovementAction  upAction;
-    MovementAction  downAction;
+    MovementAction forwardAction;
+    MovementAction backwardAction;
+    MovementAction leftAction;
+    MovementAction rightAction;
+    MovementAction upAction;
+    MovementAction downAction;
 
-    TextWidget      text;
+    TextWidget text;
 
 public:
     Game();
     ~Game();
 
-    static World *CreateWorld(const char *name, void *cookie);
+    static World* CreateWorld( const char* name, void* cookie );
 };
 
 #endif // GAME_HPP

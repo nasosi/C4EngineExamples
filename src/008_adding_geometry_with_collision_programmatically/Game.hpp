@@ -12,43 +12,41 @@ using namespace C4;
 
 extern "C"
 {
-C4_MODULE_EXPORT C4::Application *CreateApplication( void );
+    C4_MODULE_EXPORT C4::Application* CreateApplication( void );
 }
 
 enum : LocatorType
 {
-    kLocatorSpectator   = 'spec'
+    kLocatorSpectator = 'spec'
 };
 
 class Game : public Application
 {
 public:
+    Game();
 
-    Game( );
+    ~Game();
 
-    ~Game( );
-
-    static World *CreateWorld( const char *name, void *cookie );
+    static World* CreateWorld( const char* name, void* cookie );
 
 private:
-
-    StringTable         stringTable;
+    StringTable stringTable;
 
     LocatorRegistration spectatorLocatorRegistar;
 
-    MovementAction  forwardAction;
-    MovementAction  backwardAction;
-    MovementAction  leftAction;
-    MovementAction  rightAction;
-    MovementAction  upAction;
-    MovementAction  downAction;
+    MovementAction forwardAction;
+    MovementAction backwardAction;
+    MovementAction leftAction;
+    MovementAction rightAction;
+    MovementAction upAction;
+    MovementAction downAction;
 
-    StartWindow     startWin;
+    StartWindow startWin;
 
-    InputMgr::KeyCallback   *previousEscapeCallback;
-    void                    *previousEscapeCookie;
+    InputMgr::KeyCallback* previousEscapeCallback;
+    void*                  previousEscapeCookie;
 
-    static void HandleEscape( void *cookie );
+    static void HandleEscape( void* cookie );
 };
 
 #endif // GAME_HPP

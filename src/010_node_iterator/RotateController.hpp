@@ -16,16 +16,16 @@ enum
 class RotateController : public Controller
 {
 public:
-    RotateController( );
-    RotateController( const float &rotationRateRadPerSec );
+    RotateController();
+    RotateController( const float& rotationRateRadPerSec );
 
-    const float &GetRotationRateRadPerSec( ) const;
+    const float& GetRotationRateRadPerSec() const;
 
-    void SetRotationRateRadPerSec( const float &rotationRate );
+    void SetRotationRateRadPerSec( const float& rotationRate );
 
     // Called by the world editor so that it knows if the controller can be used
     // with a specific type of node. Here we will only allow Geometry Nodes.
-    static bool ValidNode( const Node *node );
+    static bool ValidNode( const Node* node );
 
     // Serialization functions. Mostly Used to save the state of the controller
     // to a file if required
@@ -34,24 +34,23 @@ public:
 
     // Functions to enable the World Editor to query and modify our controller
     // settings
-    void BuildSettingList( List<Setting> *settingList ) const override;
-    void CommitSetting( const Setting *setting ) override;
+    void BuildSettingList( List<Setting>* settingList ) const override;
+    void CommitSetting( const Setting* setting ) override;
 
-    void PreprocessController( ) override;
+    void PreprocessController() override;
 
     // Called at every frame to move the target node (for example a geometry node).
-    void MoveController( );
+    void MoveController();
 
 private:
-
     RotateController( const RotateController& other );
 
     // Create a new controller based on the state of "this".
-    Controller *Replicate( ) const;
+    Controller* Replicate() const;
 
-    float         rotationRate_ = Math::two_pi / 1000.0F;   // In radians per millisecond.
-    float         currentRotationAngle_ = 0.0;              // The current angle, in radians.
-    Transform4D   originalTransform_;                       // The target's original transform.
+    float       rotationRate_         = Math::two_pi / 1000.0F; // In radians per millisecond.
+    float       currentRotationAngle_ = 0.0; // The current angle, in radians.
+    Transform4D originalTransform_; // The target's original transform.
 };
 
 #endif // ROTATE_CONTROLLER_HPP
