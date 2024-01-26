@@ -92,3 +92,6 @@ The currently available examples are shown in the table below.
 
 ## Changing the current application
 To change the active application, modify the `C4ActiveApp` variable and reconfigure CMake. CMake will update the game.cfg file and other directories and files that may need to be changed. 
+
+# Version format
+C4EngineExamples version follows the following pattern: v[C4-Engine version].[C4EngineExamples version for the particular C4-Engine version]. For example for C4-Engine version 7.1.1, and for C4EngineExamples version 2, the version will be: v7.1.1.2
