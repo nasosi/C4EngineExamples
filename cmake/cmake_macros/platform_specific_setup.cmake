@@ -1,0 +1,5 @@
+if (WIN32)
+    include( cmake/win_setup.cmake )
+else ()
+    message(Error "The C4 Engine currently only supports windows")
+endif()
