@@ -9,13 +9,6 @@ This repository is a collection of basic examples for C4Engine (https://c4engine
 </p>
 </div>
 
-This repository uses ```git lfs```, and to clone, you may need to use the following sequence of commands:
-```bash
-git lfs install # This will install git lfs for your user account. It needs to be executed only once per account.
-git clone
-cd C4EngineExamples
-git lfs pull
-```
 ## Why a CMake template
 Besides CMake being the build tool I am most familiar with, some additional reasons motivated developing a CMake-based toolchain. These are (a) Enabling code sharing in a way that makes compilation and execution of user applications an easy task; This is currently not easy with C4-Engine because one needs to respect the engine license, and the process of introducing additional apps involves many manual steps (b) Automate several build tasks, (c) Enable easier team-working by disengaging certain parts of the Engine, and (d) CMake appears to become the defacto C++ build tool: it is supported by most IDEs, and is very popular within the C++ user community.
 
