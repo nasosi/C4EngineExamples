@@ -49,7 +49,7 @@ Game::Game() :
     TheInterfaceMgr->AddWidget( logoWindow );
 
     // Call a function to perform extra setup steps after the logo has finished playing
-    logoWindow->SetCompletionCallback( &Game::HandleLogoCompletion, this );
+    logoWindow->SetCompletionCallback( &Game::HandleC4EngineLogoCompletion, this );
 }
 
 Game::~Game()
@@ -70,7 +70,7 @@ void Game::HandleEscape( void* cookie )
 }
 
 // This function is called after the logo has finished playing
-void Game::HandleLogoCompletion( LogoWindow* window, void* cookie )
+void Game::HandleC4EngineLogoCompletion( LogoWindow* window, void* cookie )
 {
     Game* game = static_cast<Game*>( cookie );
 

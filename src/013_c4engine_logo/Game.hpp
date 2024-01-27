@@ -66,7 +66,7 @@ private:
     static void HandleEscape( void* cookie );
 
     // A Callback function executed when the C4 Engine logo has finished playing
-    static void HandleLogoCompletion( LogoWindow* window, void* cookie );
+    static void HandleC4EngineLogoCompletion( LogoWindow* window, void* cookie );
 };
 
 #endif // GAME_HPP
