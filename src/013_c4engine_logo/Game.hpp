@@ -40,7 +40,7 @@ public:
 private:
     StringTable stringTable;
 
-    TextWidget controlKeysText;
+    TextWidget controlKeysInfo;
 
     LocatorRegistration spectatorLocatorRegistar;
 

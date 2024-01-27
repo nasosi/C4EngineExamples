@@ -23,7 +23,7 @@ Game::Game() :
     accelerate( kActionUp ),
     decelerate( kActionDown ),
 
-    controlKeysText( Vector2D( 420.0F, 32.0F ), "WASD to turn, space for throttle." )
+    controlKeysInfo( Vector2D( 420.0F, 32.0F ), "WASD to turn, space for throttle." )
 {
     TheInputMgr->AddAction( &rollLeft );
     TheInputMgr->AddAction( &rollRight );
@@ -74,11 +74,11 @@ void Game::HandleLogoCompletion( LogoWindow* window, void* cookie )
 {
     Game* game = static_cast<Game*>( cookie );
 
-    game->controlKeysText.SetFont( "font/Bold", 12 );
-    game->controlKeysText.SetWidgetColor( ColorRGBA( 255.0f / 255.0f, 204.0f / 255.0f, 102.0f / 255.0f ) );
-    game->controlKeysText.SetWidgetPosition( Point2D( 50.0f, 50.0f ) );
+    game->controlKeysInfo.SetFont( "font/Bold", 12 );
+    game->controlKeysInfo.SetWidgetColor( ColorRGBA( 255.0f / 255.0f, 204.0f / 255.0f, 102.0f / 255.0f ) );
+    game->controlKeysInfo.SetWidgetPosition( Point2D( 50.0f, 50.0f ) );
 
-    TheInterfaceMgr->AddWidget( &game->controlKeysText );
+    TheInterfaceMgr->AddWidget( &game->controlKeysInfo );
 }
 
 World* Game::CreateWorld( const char* name, void* cookie )
