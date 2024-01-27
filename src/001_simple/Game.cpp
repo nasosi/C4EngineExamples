@@ -3,7 +3,6 @@
 
 #include "C4ToolWindows.h"
 
-// This is the entry point of your application.
 C4_MODULE_EXPORT C4::Application* CreateApplication()
 {
     return new ( Game );
