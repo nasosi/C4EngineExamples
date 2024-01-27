@@ -44,7 +44,7 @@ Game::Game() :
     previousEscapeCookie   = TheInputMgr->GetEscapeCookie();
     TheInputMgr->SetEscapeCallback( &HandleEscape, this );
 
-    // Create the logo window and add it to the interface. It will delete itself upon completion
+    // Create the logo window and add it to the interface. It will delete itself upon logo replay completion
     LogoWindow* logoWindow = new LogoWindow;
     TheInterfaceMgr->AddWidget( logoWindow );
 
