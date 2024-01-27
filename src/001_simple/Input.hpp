@@ -5,6 +5,10 @@
 
 using namespace C4;
 
+// These action types are used to define bindings to input controls.
+// Default settings the relate specific devices (for example mice,
+// keyboards) to controls (like buttons, wheels, etc.) are located
+// in the C4-Engine Data/Engine/input.cfg file
 enum : ActionType
 {
     kActionForward  = 'frwd',

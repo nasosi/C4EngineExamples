@@ -36,7 +36,7 @@ private:
 
 public:
     Game();
-    ~Game();
+    ~Game() override;
 
     // Function to make the World Manager create an instance of our custom world
     // class(GameWorld) instead of the default, World class
