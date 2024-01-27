@@ -33,6 +33,8 @@ public:
 private:
     StringTable stringTable;
 
+    TextWidget controlKeysInfo;
+
     LocatorRegistration spectatorLocatorRegistar;
 
     // We create a registar so we can register the controller with the engine

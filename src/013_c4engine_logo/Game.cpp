@@ -23,7 +23,7 @@ Game::Game() :
     accelerate( kActionUp ),
     decelerate( kActionDown ),
 
-    controlKeysInfo( Vector2D( 420.0F, 32.0F ), "WASD to turn, space for throttle." )
+    controlKeysInfo( Vector2D( 480.0F, 32.0F ), "'WASD' to turn, 'space' to accelerate, 'c' to deccelerate." )
 {
     TheInputMgr->AddAction( &rollLeft );
     TheInputMgr->AddAction( &rollRight );
@@ -76,7 +76,7 @@ void Game::HandleC4EngineLogoCompletion( LogoWindow* window, void* cookie )
 
     game->controlKeysInfo.SetFont( "font/Bold", 12 );
     game->controlKeysInfo.SetWidgetColor( ColorRGBA( 255.0f / 255.0f, 204.0f / 255.0f, 102.0f / 255.0f ) );
-    game->controlKeysInfo.SetWidgetPosition( Point2D( 50.0f, 50.0f ) );
+    game->controlKeysInfo.SetWidgetPosition( Point2D( 25.0f, 25.0f ) );
 
     TheInterfaceMgr->AddWidget( &game->controlKeysInfo );
 }
