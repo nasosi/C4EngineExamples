@@ -193,7 +193,7 @@ include( ${C4CMakeDir}/cmake_macros/platform_specific_setup.cmake )
 find_package( OpenGL REQUIRED )
 set( C4SystemLibraries "${C4SystemLibraries} ${OPENGL_gl_LIBRARY}" )
 
-include( cmake/apply_patches.cmake )
+include( cmake/apply_patches.cmake  )
 
 # Finalize compilation target
 add_executable ( ${C4CurrentTargetName} WIN32 ${C4SourceFiles} ${C4HeaderFiles} ${TerathonHeaderFiles})
