@@ -7,6 +7,7 @@ set( C4SourceFiles
     ${C4EngineCodeDir}/C4+Windows.rc
     ${C4EngineCodeDir}/C4+Wintab.cpp 
     ${C4EngineCodeDir}/C4Memory.cpp
+    ${C4EngineCodeDir}/C4Engine.cpp
     # Base > TerathonCode
     ${C4TerathonCodeDir}/TSTools.cpp
     #Controllers
