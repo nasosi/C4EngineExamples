@@ -16,6 +16,7 @@ file( GLOB SourceFiles *.cpp )
 file( GLOB HeaderFiles *.hpp )
 
 add_library ( ${C4CurrentTargetName} MODULE ${SourceFiles} ${HeaderFiles} ) # MODULE because we don't care about the .lib. If C4 was structured differently then we might need a shared library
+add_dependencies( ${C4CurrentTargetName} ColladaImporter MovieTool ResourcePacker SlugImporter SoundTool StringImporter TextureTool OpenGexImporter )
 
 target_include_directories( ${C4CurrentTargetName} PRIVATE ${C4EngineCodeDir} ${C4PluginCodeDir})
 

@@ -26,12 +26,14 @@ class Game : public Application
 public:
     Game();
 
-    ~Game();
+    ~Game() override;
 
     static World* CreateWorld( const char* name, void* cookie );
 
 private:
     StringTable stringTable;
+
+    TextWidget controlKeysInfo;
 
     LocatorRegistration spectatorLocatorRegistar;
 

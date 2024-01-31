@@ -18,6 +18,7 @@ add_subdirectory( src )
 # Set the game name in game.cfg, so that C4Engine knows which dll to load:
 configure_file( ${C4CMakeDir}/game.cfg.in ${C4ProgramRootDir}/Data/Engine/game.cfg @ONLY )
 
+include( cmake/compute_and_display_build_setup.cmake )
+
 include( cmake/setup_installer.cmake )
 
-include( cmake/compute_and_display_build_setup.cmake )

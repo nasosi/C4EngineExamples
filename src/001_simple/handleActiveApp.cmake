@@ -38,7 +38,6 @@ else()
     # Here we need to manually specify each of the Data folders
     install( DIRECTORY    
                 ${CMAKE_CURRENT_LIST_DIR}/Data/Game 
-                ${CMAKE_CURRENT_LIST_DIR}/Data/Panel 
                 ${CMAKE_CURRENT_LIST_DIR}/Data/World
             DESTINATION 
                 bin/Data/Application/${CurrentAppName} )

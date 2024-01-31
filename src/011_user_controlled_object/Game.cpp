@@ -20,7 +20,9 @@ Game::Game() :
     pitchUp( kActionForward ),
     pitchDown( kActionBackward ),
     accelerate( kActionUp ),
-    decelerate( kActionDown )
+    decelerate( kActionDown ),
+
+    controlKeysInfo( Vector2D( 480.0F, 32.0F ), "'WASD' to turn, 'space' to accelerate, 'c' to deccelerate." )
 {
     TheInputMgr->AddAction( &rollLeft );
     TheInputMgr->AddAction( &rollRight );
@@ -40,6 +42,12 @@ Game::Game() :
     previousEscapeCallback = TheInputMgr->GetEscapeCallback();
     previousEscapeCookie   = TheInputMgr->GetEscapeCookie();
     TheInputMgr->SetEscapeCallback( &HandleEscape, this );
+
+    controlKeysInfo.SetFont( "font/Bold", 12 );
+    controlKeysInfo.SetWidgetColor( ColorRGBA( 255.0f / 255.0f, 204.0f / 255.0f, 102.0f / 255.0f ) );
+    controlKeysInfo.SetWidgetPosition( Point2D( 25.0f, 25.0f ) );
+
+    TheInterfaceMgr->AddWidget( &controlKeysInfo );
 }
 
 Game::~Game()
