@@ -96,3 +96,5 @@ else( )
     endif()
 
 endif()
+
+unset( C4MSSignTool )
