@@ -1,0 +1,5 @@
+;--------------------------------
+;Signing
+
+  !finalize '@CPACK_NSIS_FINALIZE_CMD@'
+  !uninstfinalize '@CPACK_NSIS_FINALIZE_CMD@'

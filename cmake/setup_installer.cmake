@@ -30,7 +30,6 @@ set(CPACK_SOURCE_IGNORE_FILES ${CPACK_IGNORE_FILES})
 
 include(CPack)
 
-message( STATUS BBB ${CMAKE_BINARY_DIR} )
 ADD_CUSTOM_TARGET( 
         Install 
     COMMAND 
