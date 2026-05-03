@@ -1,5 +1,5 @@
 # C4-Engine examples
-This repository is a collection of basic examples for C4Engine (https://c4engine.com/). If you are interested in a specific version, use the particular [tag](https://github.com/nasosi/C4EngineExamples/tags).
+This repository is a collection of basic examples for C4Engine (https://c4engine.com/).
 
 <div align="center">
 <p float="center">
@@ -9,15 +9,55 @@ This repository is a collection of basic examples for C4Engine (https://c4engine
 </p>
 </div>
 
-## Installing the examples
-1. Place the "Examples" folder inside a subdirectory named V4 in the main C4 folder. The structure should look like:
+# C4 Engine – Adding Examples to the C4 Engine Solution
 
-2. Open the C4 Visual Studio Solution from {C4 Engine Root Folder}\VisualStudio-Win\C4\C4.sln.
-3. In the solution explorer (usually top left), right-click on the solution name ("Solution 'C4' ...), and navigate to Add->New Solution Folder.
-4. Set the name for thesolution folder to "Examples".
-5. Right-click on the folder you just created and select Add->Existing Project
-6. Navigate to {C4Engine Root Director}\V4\Examples\001_Simple, click on the .vcxproj file and click open.
-7. Repeat for the rest of the examples
+To add the examples to the C4 Engine solution, follow the steps below.
+
+## 1. Folder Setup
+Place the **Examples** folder inside a subdirectory named **V4** within the main **C4** folder. The structure should look like:
+```
+C4-Engine
+└── Data
+└── EngineCode
+...
+└── V4
+     └── Examples
+           └── 001_Simple
+           └── 002_Display_Text
+```
+Alternatively, and instead of manually setting up the folder structure, you can add them as a git submodule with the following git commands:
+  1. ```git submodule add https://github.com/nasosi/C4EngineExamples V4```
+  2. ```git submodule update --init --recursive```
+
+
+## 2. Open the Solution
+Open the C4 Visual Studio Solution from:
+```{C4 Engine Root Folder}\VisualStudio-Win\C4\C4.sln```
+## 3. Create a Solution Folder
+In **Solution Explorer** (usually top-left in Visual Studio):
+
+- Right-click the solution (e.g., *Solution "C4"*)
+- Select **Add → New Solution Folder**
+- Name it: ```Examples```
+---
+## 4. Add the First Example Project
+- Right-click the newly created **Examples** folder
+- Select **Add → Existing Project**
+- Navigate to: ```{C4 Engine Root Folder}\V4\Examples\001_Simple```
+---
+- Select the `.vcxproj` file and click **Open**
+
+---
+
+## 5. Add Remaining Examples
+Repeat the same process for each remaining example project:
+
+- Right-click **Examples**
+- Choose **Add → Existing Project**
+- Select the `.vcxproj` file for each example folder
+
+## 6. Create Data and Import junctions
+Execute the CreateJunctions.bat file from the C4Engine\V4\Examples subfolder.
 
 # List of examples
 The currently available examples are shown in the table below.
@@ -35,8 +75,6 @@ The currently available examples are shown in the table below.
 | 009_Custom_Controller | A custom controller used to rotate geometry that has collision enabled. |
 | 010_User_Controlled_Object | A tiny space city with a user-controlled spacecraft. |
 | 011_texture | Texturing example and automated asset import using CMake targets. |
-## Changing the current application
-To change the active application, modify the `C4ActiveApp` variable and reconfigure CMake. CMake will update the game.cfg file and other directories and files that may need to be changed. 
 
 # Version format
 C4EngineExamples version follows the following pattern: v[C4-Engine version].[C4EngineExamples version for the particular C4-Engine version]. For example for C4-Engine version 7.1.1, and for C4EngineExamples version 2, the version will be: v7.1.1.2
