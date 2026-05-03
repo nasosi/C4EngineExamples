@@ -14,14 +14,10 @@ This repository is a collection of basic examples for C4Engine (https://c4engine
 
 2. Open the C4 Visual Studio Solution from {C4 Engine Root Folder}\VisualStudio-Win\C4\C4.sln.
 3. In the solution explorer (usually top left), right-click on the solution name ("Solution 'C4' ...), and navigate to Add->New Solution Folder.
-4. Rename the solution folder to "Examples"
+4. Set the name for thesolution folder to "Examples".
 5. Right-click on the folder you just created and select Add->Existing Project
 6. Navigate to {C4Engine Root Director}\V4\Examples\001_Simple, click on the .vcxproj file and click open.
 7. Repeat for the rest of the examples
-
-  
-  
-Detailed getting started videos can be found in the [wiki](https://github.com/nasosi/C4EngineExamples/wiki).
 
 # List of examples
 The currently available examples are shown in the table below.
