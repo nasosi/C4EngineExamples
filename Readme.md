@@ -9,6 +9,18 @@ This repository is a collection of basic examples for C4Engine (https://c4engine
 </p>
 </div>
 
+## Installing the examples
+1. Place the "Examples" folder inside a subdirectory named V4 in the main C4 folder. The structure should look like:
+
+2. Open the C4 Visual Studio Solution from {C4 Engine Root Folder}\VisualStudio-Win\C4\C4.sln.
+3. In the solution explorer (usually top left), right click on the solution name ("Solution 'C4' ...), and navigate to Add->New Solution Folder.
+4. Rename the solution folder to "Examples"
+5. Right click on the folder you just created and select Add->Existing Project
+6. Navigate to {C4Engine Root Director}\V4\Examples\001_Simple, click on the .vcxproj file and click open.
+7. Repeat for the rest of the examples
+
+  
+  
 Detailed getting started videos can be found in the [wiki](https://github.com/nasosi/C4EngineExamples/wiki).
 ## Why a CMake template
 Besides CMake being the build tool I am most familiar with, some additional reasons motivated developing a CMake-based toolchain. These are (a) Enabling code sharing in a way that makes compilation and execution of user applications an easy task; This is currently not easy with C4-Engine because one needs to respect the engine license, and the process of introducing additional apps involves many manual steps (b) Automate several build tasks, (c) Enable easier team-working by disengaging certain parts of the Engine, and (d) CMake appears to become the defacto C++ build tool: it is supported by most IDEs, and is very popular within the C++ user community.
