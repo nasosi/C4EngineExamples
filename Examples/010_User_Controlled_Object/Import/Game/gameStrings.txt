@@ -1,0 +1,16 @@
+Entry (id = 'LOCA')
+{
+    string {"Locator"}
+    Entry (id = 'spec')
+    { 
+        string {"Spectator"}
+    }
+}
+Entry (id = 'ctls')
+{
+	Entry (id = 'ssct')
+	{
+		string {"Spaceship Controller"}
+		Entry (id = 'rrat') {string {"Rotation rate (deg/sec)"}}
+    }
+}

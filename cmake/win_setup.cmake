@@ -1,1 +1,0 @@
-set( C4PlatformDefinition C4_WINDOWS)
