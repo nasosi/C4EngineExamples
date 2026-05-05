@@ -26,7 +26,7 @@ C4-Engine
            └── 002_Display_Text
 ```
 Alternatively, and instead of manually setting up the folder structure, you can add them as a git submodule with the following git commands:
-  1. ```git submodule add https://github.com/nasosi/C4EngineExamples V4```
+  1. ```git submodule add https://github.com/nasosi/C4EngineExamples V4/Examples```
   2. ```git submodule update --init --recursive```
 
 
