@@ -1,14 +1,12 @@
 #pragma once
 
+#include "SpaceShipController.hpp"
 
 #include "C4Cameras.h"
 #include "C4World.h"
 
 
 using namespace C4;
-
-
-class SpaceShipController;
 
 
 class GameWorld : public World
@@ -23,6 +21,9 @@ private:
     // SpaceShipControlActions (see Input.hpp).
     SpaceShipController* spaceShipController = nullptr;
     void                 SetupSpaceshipController();
+
+    template <ActionType type, uint32 Flag>
+    friend class SpaceShipControlAction;
 
 public:
 
