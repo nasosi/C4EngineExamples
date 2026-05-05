@@ -13,7 +13,7 @@ This repository is a collection of basic examples for C4Engine (https://c4engine
 
 To add the examples to the C4 Engine solution, follow the steps below.
 
-**1. Folder Setup**
+### 1. Folder Setup
 Place the **Examples** folder inside a subdirectory named **V4** within the main **C4** folder. The structure should look like:
 ```
 C4-Engine
@@ -30,17 +30,17 @@ Alternatively, and instead of manually setting up the folder structure, you can 
   2. ```git submodule update --init --recursive```
 
 
-**2. Open the Solution**
+### 2. Open the Solution
 Open the C4 Visual Studio Solution from:
 ```{C4 Engine Root Folder}\VisualStudio-Win\C4\C4.sln```
-## 3. Create a Solution Folder
+### 3. Create a Solution Folder
 In **Solution Explorer** (usually top-left in Visual Studio):
 
 - Right-click the solution (e.g., *Solution "C4"*)
 - Select **Add → New Solution Folder**
 - Name it: ```Examples```
 ---
-## 4. Add the First Example Project
+### 4. Add the First Example Project
 - Right-click the newly created **Examples** folder
 - Select **Add → Existing Project**
 - Navigate to: ```{C4 Engine Root Folder}\V4\Examples\001_Simple```
@@ -49,14 +49,14 @@ In **Solution Explorer** (usually top-left in Visual Studio):
 
 ---
 
-## 5. Add Remaining Examples
+### 5. Add Remaining Examples
 Repeat the same process for each remaining example project:
 
 - Right-click **Examples**
 - Choose **Add → Existing Project**
 - Select the `.vcxproj` file for each example folder
 
-## 6. Create Data and Import junctions
+### 6. Create Data and Import junctions
 Execute the CreateJunctions.bat file from the C4Engine\V4\Examples subfolder.
 
 # List of examples
