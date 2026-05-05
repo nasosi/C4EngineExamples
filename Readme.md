@@ -53,7 +53,7 @@ Repeat the same process for each remaining example project:
 - Select the `.vcxproj` file for each example folder
 ---
 ### 6. Create Data and Import junctions
-Execute the CreateJunctions.bat file from the C4Engine\V4\Examples subfolder.
+Execute the CreateJunctions.bat file from the {C4 Engine Root Folder}\V4\Examples subfolder.
 
 ---
 # List of examples
