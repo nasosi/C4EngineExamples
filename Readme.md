@@ -33,7 +33,7 @@ Alternatively, and instead of manually setting up the folder structure, you can 
 Open the C4 Visual Studio Solution from:
 ```{C4 Engine Root Folder}\VisualStudio-Win\C4\C4.sln```
 ### 3. Create a Solution Folder
-In **Solution Explorer** (usually top-left in Visual Studio):
+In **Solution Explorer** (usually top-right in Visual Studio):
 
 - Right-click the solution (e.g., *Solution "C4"*)
 - Select **Add → New Solution Folder**
