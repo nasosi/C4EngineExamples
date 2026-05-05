@@ -1,4 +1,4 @@
-#include "SpaceShipController.hpp"
+#include "SpaceshipController.hpp"
 #include "Game.hpp"
 #include "Input.hpp"
 #include "World.hpp"
@@ -61,54 +61,62 @@ Matrix3D RollPitchYawMatrix( float a, float b, float c )
     float sb = Sin( b );
     float sc = Sin( c );
 
-    return Matrix3D(
-        ca * cb, -cb * sa, sb, cc * sa + ca * sb * sc, ca * cc - sa * sb * sc, -cb * sc, -ca * cc * sb + sa * sc, cc * sa * sb + ca * sc, cb * cc );
+    return Matrix3D( ca * cb,
+                     -cb * sa,
+                     sb,
+                     cc * sa + ca * sb * sc,
+                     ca * cc - sa * sb * sc,
+                     -cb * sc,
+                     -ca * cc * sb + sa * sc,
+                     cc * sa * sb + ca * sc,
+                     cb * cc );
 }
 
 
-SpaceShipController::SpaceShipController() : Controller( kControllerSpaceShip )
+SpaceshipController::SpaceshipController() : Controller( kControllerSpaceship )
 {
 }
 
 
-SpaceShipController::SpaceShipController( float rotationRate ) :
-    Controller( kControllerSpaceShip ),
-    rollRate( rotationRate ), pitchRate( rotationRate )
+SpaceshipController::SpaceshipController( float rotationRate ) :
+    Controller( kControllerSpaceship ),
+    rollRate( rotationRate ),
+    pitchRate( rotationRate )
 {
 }
 
 
-float SpaceShipController::GetRollRate() const
+float SpaceshipController::GetRollRate() const
 {
     return rollRate;
 }
 
 
-void SpaceShipController::SetRollRate( const float& rate )
+void SpaceshipController::SetRollRate( const float& rate )
 {
     rollRate = rate;
 }
 
 
-float SpaceShipController::GetPitchRate() const
+float SpaceshipController::GetPitchRate() const
 {
     return pitchRate;
 }
 
 
-void SpaceShipController::SetPitchRate( const float& rate )
+void SpaceshipController::SetPitchRate( const float& rate )
 {
     pitchRate = rate;
 }
 
 
-bool SpaceShipController::ValidNode( const Node* node )
+bool SpaceshipController::ValidNode( const Node* node )
 {
     return ( node->GetNodeType() == kNodeGeometry );
 }
 
 
-void SpaceShipController::Pack( Packer& data, uint32 packFlags ) const
+void SpaceshipController::Pack( Packer& data, uint32 packFlags ) const
 {
     Controller::Pack( data, packFlags );
 
@@ -116,7 +124,7 @@ void SpaceShipController::Pack( Packer& data, uint32 packFlags ) const
 }
 
 
-void SpaceShipController::Unpack( Unpacker& data, uint32 unpackFlags )
+void SpaceshipController::Unpack( Unpacker& data, uint32 unpackFlags )
 {
     Controller::Unpack( data, unpackFlags );
 
@@ -124,18 +132,19 @@ void SpaceShipController::Unpack( Unpacker& data, uint32 unpackFlags )
 }
 
 
-void SpaceShipController::BuildSettingList( List<Setting>* settingList ) const
+void SpaceshipController::BuildSettingList( List<Setting>* settingList ) const
 {
     float              rotationRateDegPerSec = rollRate * radPerMillisecond_To_DegPerSec;
     const StringTable& table                 = TheGame->GetStringTable();
 
     // We pick the string for the rotation rate from the string table, and use the 'rrat' identifier for the setting
-    // that will appear in the editor interface. We also set its value from what is stored in the SpaceShipController 
-    settingList->AppendListElement( new TextSetting( 'rrat', table.GetString( StringID( 'ctls', 'ssct', 'rrat' ) ), rotationRateDegPerSec ) );
+    // that will appear in the editor interface. We also set its value from what is stored in the SpaceshipController
+    settingList->AppendListElement(
+        new TextSetting( 'rrat', table.GetString( StringID( 'ctls', 'ssct', 'rrat' ) ), rotationRateDegPerSec ) );
 }
 
 
-void SpaceShipController::CommitSetting( const Setting* setting )
+void SpaceshipController::CommitSetting( const Setting* setting )
 {
     // Are we setting the rotation rate?
     if ( setting->GetSettingIdentifier() == 'rrat' )
@@ -147,7 +156,7 @@ void SpaceShipController::CommitSetting( const Setting* setting )
 }
 
 
-void SpaceShipController::PreprocessController()
+void SpaceshipController::PreprocessController()
 {
     // Perform any setup required before the controller can be used.
     Controller::PreprocessController();
@@ -155,7 +164,7 @@ void SpaceShipController::PreprocessController()
     // Get the original transform of the target node.
     Node* target = GetTargetNode();
 
-    // Get the object center so we can rotate about it. We'll use the center of the 
+    // Get the object center so we can rotate about it. We'll use the center of the
     // bounding box, which is good enough for our purposes.
     Box3D boundingBox;
     target->CalculateBoundingBox( &boundingBox );
@@ -177,11 +186,11 @@ void SpaceShipController::PreprocessController()
 }
 
 
-void SpaceShipController::MoveController()
+void SpaceshipController::MoveController()
 {
     auto dt = TheTimeMgr->GetFloatDeltaTime();
 
-    // Depending on the motion flags (that correspond to user input), calculate 
+    // Depending on the motion flags (that correspond to user input), calculate
     // rotation rates and velocity
     bool rotRoll = false;
     if ( motionFlags & kRollRight )
@@ -237,10 +246,10 @@ void SpaceShipController::MoveController()
     }
 
     // Build delta transform (rotation + translation about pivot) to move the spaceship
-    Matrix3D    deltaR           = RollPitchYawMatrix( rollRate * dt, 0, pitchRate * dt );
-    Vector3D    fwdTranslation   = deltaR * Vector3D( 0, 0, velocity * dt ); // translation due to thrust in the model's local forward direction
-    Vector3D    pivotOffset      = rotationPivotPoint - deltaR * rotationPivotPoint; // rotate pivot back to rotation point, then restore it
-    Vector3D    deltaTranslation = pivotOffset + fwdTranslation;
+    Matrix3D deltaR         = RollPitchYawMatrix( rollRate * dt, 0, pitchRate * dt );
+    Vector3D fwdTranslation = deltaR * Vector3D( 0, 0, velocity * dt ); // translation due to thrust in the model's local forward direction
+    Vector3D pivotOffset    = rotationPivotPoint - deltaR * rotationPivotPoint; // rotate pivot back to rotation point, then restore it
+    Vector3D deltaTranslation = pivotOffset + fwdTranslation;
     Transform3D delta( deltaR, deltaTranslation ); // full incremental motion
 
     Node* target = GetTargetNode();
@@ -249,8 +258,8 @@ void SpaceShipController::MoveController()
 }
 
 
-SpaceShipController::SpaceShipController( const SpaceShipController& other ) :
-    Controller( kControllerSpaceShip ),
+SpaceshipController::SpaceshipController( const SpaceshipController& other ) :
+    Controller( kControllerSpaceship ),
     rollRate( other.rollRate ),
     pitchRate( other.pitchRate ),
     velocity( other.velocity )
@@ -258,7 +267,7 @@ SpaceShipController::SpaceShipController( const SpaceShipController& other ) :
 }
 
 
-Controller* SpaceShipController::Replicate() const
+Controller* SpaceshipController::Replicate() const
 {
-    return ( new SpaceShipController( *this ) );
+    return ( new SpaceshipController( *this ) );
 }

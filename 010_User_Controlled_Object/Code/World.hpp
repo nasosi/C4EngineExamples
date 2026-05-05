@@ -1,12 +1,14 @@
 #pragma once
 
-#include "SpaceShipController.hpp"
 
 #include "C4Cameras.h"
 #include "C4World.h"
 
 
 using namespace C4;
+
+
+class SpaceshipController;
 
 
 class GameWorld : public World
@@ -18,12 +20,9 @@ private:
 
     // The spaceship controller is assigned to a node in the world, and owned by that
     // node. We will keep a pointer to it here for access from the
-    // SpaceShipControlActions (see Input.hpp).
-    SpaceShipController* spaceShipController = nullptr;
+    // SpaceshipControlActions (see Input.hpp).
+    SpaceshipController* spaceShipController = nullptr;
     void                 SetupSpaceshipController();
-
-    template <ActionType type, uint32 Flag>
-    friend class SpaceShipControlAction;
 
 public:
 
@@ -37,12 +36,12 @@ public:
         return &spectatorCamera;
     }
 
-    const SpaceShipController* GetSpaceShipController() const
+    const SpaceshipController* GetSpaceshipController() const
     {
         return spaceShipController;
     }
 
-    SpaceShipController* GetSpaceShipController()
+    SpaceshipController* GetSpaceshipController()
     {
         return spaceShipController;
     }

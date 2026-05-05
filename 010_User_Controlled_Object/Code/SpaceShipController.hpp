@@ -9,49 +9,17 @@ using namespace C4;
 
 enum
 {
-    kControllerSpaceShip = 'cssh'
+    kControllerSpaceship = 'cssh'
 };
 
-class SpaceShipController : public Controller
+class SpaceshipController : public Controller
 {
-public:
-    SpaceShipController();
-    SpaceShipController( float rotationRate );
-
-    float GetRollRate() const;
-    void  SetRollRate( const float& rate );
-
-    float GetPitchRate() const;
-    void  SetPitchRate( const float& rate );
-
-    // Called by the world editor so that it knows if the controller can be used
-    // with a specific type of node. Here we will only allow Geometry Nodes.
-    static bool ValidNode( const Node* node );
-
-    // Serialization functions. Mostly Used to save the state of the controller
-    // to a file if required
-    void Pack( Packer& data, uint32 packFlags ) const override;
-    void Unpack( Unpacker& data, uint32 unpackFlags ) override;
-
-    // Functions to enable the World Editor to query and modify our controller
-    // settings
-    void BuildSettingList( List<Setting>* settingList ) const override;
-    void CommitSetting( const Setting* setting ) override;
-
-    void PreprocessController() override;
-
-    // Called at every frame to move the target node (for example a geometry node).
-    void MoveController() override;
-
 private:
-    template <Type type, uint32 Flag>
-    friend class SpaceShipControlAction; // So it can access motionFlags
 
     uint32 motionFlags = 0;
 
-    SpaceShipController( const SpaceShipController& other );
+    SpaceshipController( const SpaceshipController& other );
 
-    // Create a new controller based on the state of "this".
     Controller* Replicate() const;
 
     float rollRate  = 0.0f;
@@ -59,6 +27,40 @@ private:
     float velocity  = 0.0f;
 
     Point3D rotationPivotPoint;
+
+
+public:
+
+    SpaceshipController();
+    SpaceshipController( float rotationRate );
+
+    uint32 GetMotionFlags() const
+    {
+        return motionFlags;
+    }
+
+    void SetMotionFlags( uint32 flags )
+    {
+        motionFlags = flags;
+    }
+
+    float GetRollRate() const;
+    void  SetRollRate( const float& rate );
+
+    float GetPitchRate() const;
+    void  SetPitchRate( const float& rate );
+
+    static bool ValidNode( const Node* node );
+
+    void Pack( Packer& data, uint32 packFlags ) const override;
+    void Unpack( Unpacker& data, uint32 unpackFlags ) override;
+
+    void BuildSettingList( List<Setting>* settingList ) const override;
+    void CommitSetting( const Setting* setting ) override;
+
+    void PreprocessController() override;
+
+    void MoveController() override;
 };
 
 #endif // ROTATE_CONTROLLER_HPP

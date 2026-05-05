@@ -1,6 +1,6 @@
 #include "World.hpp"
 #include "Game.hpp"
-#include "SpaceShipController.hpp"
+#include "SpaceshipController.hpp"
 
 #include <C4Engine.h>
 
@@ -100,10 +100,10 @@ void GameWorld::SetupSpaceshipController()
 
             // Check whether this geometry has a controller, and if so, whether it’s the 
             // spaceship controller type we’re looking for.
-            if ( controller && controller->GetControllerType() == kControllerSpaceShip )
+            if ( controller && controller->GetControllerType() == kControllerSpaceship )
             {
                 // Cache the controller for later use.
-                spaceShipController = static_cast<SpaceShipController*>( controller );
+                spaceShipController = static_cast<SpaceshipController*>( controller );
                 spaceShipController->SetRollRate( 0.0 );
 
                 // Stop searching once the first matching controller is found. This assumes there 

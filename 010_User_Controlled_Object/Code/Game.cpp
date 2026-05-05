@@ -28,7 +28,7 @@ Game::Game() :
     // This string is shown in the world editor UI for the controller. It is defined in
     // gameStrings.txt (Import folder) and compiled into gameStrings.str in the Data
     // folder when the developer imports it from within the C4 Engine editor.
-    rotateControllerReg( kControllerSpaceShip, stringTable.GetString( StringID( 'ctls', 'ssct' ) ) )
+    rotateControllerReg( kControllerSpaceship, stringTable.GetString( StringID( 'ctls', 'ssct' ) ) )
 {
     TheWorldMgr->SetWorldCreator( &CreateWorld );
 
