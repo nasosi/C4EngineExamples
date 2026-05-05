@@ -28,8 +28,7 @@ C4-Engine
 Alternatively, and instead of manually setting up the folder structure, you can add them as a git submodule with the following git commands:
   1. ```git submodule add https://github.com/nasosi/C4EngineExamples V4/Examples```
   2. ```git submodule update --init --recursive```
-
-
+---
 ### 2. Open the Solution
 Open the C4 Visual Studio Solution from:
 ```{C4 Engine Root Folder}\VisualStudio-Win\C4\C4.sln```
@@ -44,21 +43,19 @@ In **Solution Explorer** (usually top-left in Visual Studio):
 - Right-click the newly created **Examples** folder
 - Select **Add → Existing Project**
 - Navigate to: ```{C4 Engine Root Folder}\V4\Examples\001_Simple```
----
 - Select the `.vcxproj` file and click **Open**
-
 ---
-
 ### 5. Add Remaining Examples
 Repeat the same process for each remaining example project:
 
 - Right-click **Examples**
 - Choose **Add → Existing Project**
 - Select the `.vcxproj` file for each example folder
-
+---
 ### 6. Create Data and Import junctions
 Execute the CreateJunctions.bat file from the C4Engine\V4\Examples subfolder.
 
+---
 # List of examples
 The currently available examples are shown in the table below.
 
