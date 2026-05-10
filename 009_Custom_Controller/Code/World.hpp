@@ -29,18 +29,19 @@
 #pragma once
 
 
-#include "C4Cameras.h"
-#include "C4World.h"
+#include <C4Cameras.h>
+#include <C4World.h>
+
 
 using namespace C4;
+
 
 class GameWorld : public World
 {
 private:
 
     SpectatorCamera spectatorCamera;
-
-    void SetupSpectatorCamera();
+    void            SetupSpectatorCamera();
 
 public:
 

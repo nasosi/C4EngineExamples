@@ -29,7 +29,7 @@
 #pragma once
 
 
-#include "C4Input.h"
+#include <C4Input.h>
 
 
 using namespace C4;

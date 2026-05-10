@@ -26,12 +26,11 @@
 // with the license of any other work that may be part of this software.
 
 
-#ifndef WORLD_HPP
-#define WORLD_HPP
+#pragma once
 
 
-#include "C4Cameras.h"
-#include "C4World.h"
+#include <C4Cameras.h>
+#include <C4World.h>
 
 
 using namespace C4;
@@ -53,8 +52,6 @@ public:
 
     SpectatorCamera* GetSpectatorCamera()
     {
-        return ( &spectatorCamera );
+        return &spectatorCamera;
     }
 };
-
-#endif // WORLD_HPP

@@ -91,36 +91,7 @@ WorldResult GameWorld::PreprocessWorld()
         return ( result );
     }
 
-    SetWorldCamera( &spectatorCamera );
+   SetupSpectatorCamera( );
 
-    float   azimuth  = 0;
-    float   altitude = 0;
-    Point3D position( 0.0f, 0.0f, 1.7f );
-
-    Marker* marker = GetRootNode()->GetFirstMarker();
-    while ( marker )
-    {
-        if ( ( marker->GetMarkerType() == kMarkerLocator ) && ( marker->NodeEnabled() ) )
-        {
-            const auto locator = static_cast<const LocatorMarker*>( marker );
-            if ( locator->GetLocatorType() == 'spec' )
-            {
-                const Vector3D direction = marker->GetWorldTransform()[ 0 ];
-
-                azimuth  = Arctan( direction.y, direction.x );
-                altitude = Arctan( direction.z, Sqrt( direction.x * direction.x + direction.y * direction.y ) );
-                position = marker->GetWorldPosition();
-
-                break;
-            }
-        }
-
-        marker = marker->GetNextListElement();
-    }
-
-    spectatorCamera.SetCameraAzimuth( azimuth );
-    spectatorCamera.SetCameraAltitude( altitude );
-    spectatorCamera.SetNodePosition( position );
-
-    return ( kWorldOkay );
+    return  kWorldOkay;
 }

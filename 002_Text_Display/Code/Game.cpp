@@ -28,8 +28,8 @@
 
 #include "Game.hpp"
 #include "World.hpp"
-
 #include "AppInfo.hpp"
+
 
 C4_MODULE_EXPORT C4::Application* CreateApplication()
 {

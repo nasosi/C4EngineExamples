@@ -1,8 +1,4 @@
-#pragma once
-
-
-#define APPNAME "010_User_Controlled_Object"
-#define APP_PATH "Examples/" APPNAME// MIT License
+// MIT License
 //
 // Copyright (c) 2023-2026 Athanasios Iliopoulos
 //
@@ -28,5 +24,12 @@
 // event, appropriate license files will be included in close folder proximity
 // to said work. You need to ensure that your use of this software is compatible
 // with the license of any other work that may be part of this software.
+
+
+#pragma once
+
+
+#define APPNAME "010_User_Controlled_Object"
+#define APP_PATH "Examples/" APPNAME
 
 
