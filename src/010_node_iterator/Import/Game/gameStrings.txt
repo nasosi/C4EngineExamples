@@ -1,8 +1,0 @@
-Entry (id = 'LOCA')
-{
-    string {"Locator"}
-    Entry (id = 'spec')
-    { 
-        string {"Spectator"}
-    }
-}

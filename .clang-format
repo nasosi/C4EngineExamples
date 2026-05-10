@@ -11,7 +11,7 @@ BasedOnStyle:  WebKit
 TabWidth:        4
 IndentWidth:     4
 UseTab:          Never
-ColumnLimit: 160
+ColumnLimit: 140
 
 # Other languages JavaScript, Proto
 
@@ -77,14 +77,14 @@ KeepEmptyLinesAtTheStartOfBlocks: true
 MacroBlockBegin: ''
 MacroBlockEnd:   ''
 JavaScriptQuotes: Double
-MaxEmptyLinesToKeep: 1
+MaxEmptyLinesToKeep: 2
 NamespaceIndentation: All
 ObjCBlockIndentWidth: 4
 ObjCSpaceAfterProperty: true
 ObjCSpaceBeforeProtocolList: true
 PenaltyBreakBeforeFirstCallParameter: 19
-PenaltyBreakComment: 300
-PenaltyBreakFirstLessLess: 120
+PenaltyBreakComment: 1
+PenaltyBreakFirstLessLess: 160
 PenaltyBreakString: 1000
 
 PenaltyExcessCharacter: 1000000
@@ -105,9 +105,12 @@ SpaceBeforeInheritanceColon: true
 
 SortUsingDeclarations: true
 SortIncludes: true
+EmptyLineBeforeAccessModifier: Always
+
+EmptyLineAfterAccessModifier: Always
 
 # Comments are for developers, they should arrange them
-ReflowComments: false
+ReflowComments: true
 
 IncludeBlocks: Preserve
 IndentPPDirectives: AfterHash
