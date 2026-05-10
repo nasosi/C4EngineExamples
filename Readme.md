@@ -11,7 +11,7 @@ This repository is a collection of basic examples for C4Engine (https://c4engine
 
 # C4 Engine – Adding Examples to the C4 Engine Solution
 
-To add the examples to the C4 Engine solution, follow the steps below.
+To add the examples to the C4 Engine solution, follow the steps below. A video showing the process can be found in the wiki of the current project: https://github.com/nasosi/C4EngineExamples/wiki
 
 ### 1. Folder Setup
 Place the **Examples** folder inside a subdirectory named **V4** within the main **C4** folder. The structure should look like:
