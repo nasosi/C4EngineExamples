@@ -72,6 +72,3 @@ The currently available examples are shown in the table below.
 | 009_Custom_Controller | A custom controller used to rotate geometry that has collision enabled. |
 | 010_User_Controlled_Object | A tiny space city with a user-controlled spacecraft. |
 | 011_texture | Texturing example and automated asset import using CMake targets. |
-
-# Version format
-C4EngineExamples version follows the following pattern: v[C4-Engine version].[C4EngineExamples version for the particular C4-Engine version]. For example for C4-Engine version 7.1.1, and for C4EngineExamples version 2, the version will be: v7.1.1.2
