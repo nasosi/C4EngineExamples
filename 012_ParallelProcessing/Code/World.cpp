@@ -122,10 +122,7 @@ void GameWorld::SetupCelestialSimulation( int num )
     };
 
 
-    AddStar( defaultStarSystemDensity, 200.0f, Point3D( Point3D::zero ), Vector3D::zero );
-
-    const float diskRadius  = 150.0f;
-    const float bulgeRadius = 15.0f;
+    AddStar( defaultStarSystemDensity, galacticCoreMass, Point3D( Point3D::zero ), Vector3D::zero );
 
     while ( num-- > 0 )
     {
@@ -135,14 +132,14 @@ void GameWorld::SetupCelestialSimulation( int num )
 
         if ( r < 0.02f )
         { // Bulge of the galaxy
-            float distanceFromCenter = bulgeRadius * Pow( RandomFloat( 0.0f, 1.0f ), 2.0f );
+            float distanceFromCenter = galacticBulgeRadius * Pow( RandomFloat( 0.0f, 1.0f ), 2.0f );
             pos                      = distanceFromCenter * RandomUnitVector3D();
             mass                     = RandomFloat( 200.0f, 400.0f ); // heavier stars in core
         }
         else
         { // Main disk of the galaxy
 
-            float distanceFromCenter = -diskRadius * Log( 1.0f - RandomFloat( 0.0f, 1.0f ) );
+            float distanceFromCenter = -galacticDiskRadius * Log( 1.0f - RandomFloat( 0.0f, 1.0f ) );
             float azimuth            = RandomFloat( 0.0f, Math::two_pi );
             pos  = Vector3D( Cos( azimuth ) * distanceFromCenter, Sin( azimuth ) * distanceFromCenter, RandomFloat( -0.02f, 0.02f ) );
             mass = 100.0f * Pow( RandomFloat( 0.0f, 1.0f ), 3.0f ) + 0.02f;
@@ -151,12 +148,11 @@ void GameWorld::SetupCelestialSimulation( int num )
         Vector3D velocity       = Vector3D::zero;
         float    planarDistance = Magnitude( pos.xy );
 
-        if ( planarDistance > 1.0f )
+        if ( planarDistance > initalVelocityDistCuttoff )
         {
             Vector3D tangent( -pos.y, pos.x, 0.0f );
             tangent.Normalize();
-            float orbitalSpeed = maxOrbitalSpeed * planarDistance /
-                                 Sqrt( planarDistance * planarDistance + missingMassScaleRadiusSq  );
+            float orbitalSpeed = maxOrbitalSpeed * planarDistance / Sqrt( planarDistance * planarDistance + missingMassScaleRadiusSq );
             velocity           = tangent * orbitalSpeed;
         }
 

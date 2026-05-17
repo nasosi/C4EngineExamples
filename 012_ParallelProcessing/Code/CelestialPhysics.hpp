@@ -32,7 +32,11 @@
 #include <C4Controller.h>
 #include <C4Threads.h>
 
-constexpr float defaultStarSystemDensity = 100.0f; // Mass density of a star system
+constexpr float defaultStarSystemDensity  = 100.0f; // Mass density of a star system
+constexpr float galacticCoreMass          = 200.0f;
+constexpr float galacticDiskRadius        = 150.0f;
+constexpr float galacticBulgeRadius       = 15.0f;
+constexpr float initalVelocityDistCuttoff = 1.0f; // Systems closer than 1.0f, will have an initial velocity of 0.0f.
 constexpr float maxOrbitalSpeed          = 0.05f;
 constexpr float missingMassScaleRadiusSq = 10000.0f; // Controls initial conditions behavior for stars away from the galactic center
 constexpr float gravitationalConstant    = 1e-8f; // G
