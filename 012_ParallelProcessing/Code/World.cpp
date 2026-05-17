@@ -156,6 +156,7 @@ void GameWorld::SetupCelestialSimulation( int num )
         AddStar( defaultStarSystemDensity, mass, pos, velocity );
     }
 
+    // We add the physics node to our world here.
     AddNewNode( CelestialPhysicsNode );
 }
 
