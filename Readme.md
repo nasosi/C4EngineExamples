@@ -130,4 +130,4 @@ The currently available examples are listed below.
 | `009_Custom_Controller` | Demonstrates a custom controller used to rotate geometry with collision enabled. |
 | `010_User_Controlled_Object` | A small space-themed environment featuring a user-controlled spacecraft. |
 | `011_Texture` | Demonstrates texturing and material setup. |
-| `011_ParallelProcessing` | Demonstrates per-frame multi-threaded computations. |
+| `012_ParallelProcessing` | Demonstrates per-frame multi-threaded computations. |
