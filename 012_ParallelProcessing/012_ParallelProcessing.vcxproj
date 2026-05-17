@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -13,8 +13,8 @@
   <PropertyGroup Label="Globals">
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>001_Simple</ProjectName>
-    <ProjectGuid>{D018762F-A1A0-4FAB-BD92-160778F85AA0}</ProjectGuid>
+    <ProjectName>012_ParallelProcessing</ProjectName>
+    <ProjectGuid>{964AE8CE-0CB2-4F5E-8964-F9B1118B51CF}</ProjectGuid>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Optimized|x64'" Label="Configuration">
@@ -43,8 +43,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">001_Simple</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Optimized|x64'">001_Simple</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">012_ParallelProcessing</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Optimized|x64'">012_ParallelProcessing</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Optimized|x64'" />
@@ -100,6 +100,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Code\CelestialPhysics.cpp" />
     <ClCompile Include="Code\Game.cpp" />
     <ClCompile Include="Code\Input.cpp" />
     <ClCompile Include="Code\World.cpp" />
@@ -109,9 +110,10 @@
     <ClInclude Include="Code\Game.hpp" />
     <ClInclude Include="Code\Input.hpp" />
     <ClInclude Include="Code\World.hpp" />
+    <ClInclude Include="Code\CelestialPhysics.hpp" />
   </ItemGroup>
   <ItemGroup>
-      <ProjectReference Include="..\..\..\VisualStudio-Win\C4\Engine\Engine.vcxproj">
+    <ProjectReference Include="..\..\..\VisualStudio-Win\C4\Engine\Engine.vcxproj">
       <Project>{81de5818-1cca-46e6-93ef-e23254643fbd}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

@@ -114,7 +114,7 @@
     <ClInclude Include="Code\World.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Engine\Engine.vcxproj">
+    <ProjectReference Include="..\..\..\VisualStudio-Win\C4\Engine\Engine.vcxproj">
       <Project>{81de5818-1cca-46e6-93ef-e23254643fbd}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

@@ -33,9 +33,9 @@
 
 using namespace C4;
 
-enum
+enum : ControllerType
 {
-    kControllerRotate = 'crot'
+    kControllerRotate = 'crot' // We need to define a controller type for our controller, otherwise the engine will not be calling the MoveController function below
 };
 
 // Based on the twist controller from the TS wiki modified with comments, style
@@ -44,6 +44,7 @@ enum
 class RotateController : public Controller
 {
 public:
+
     RotateController();
     RotateController( const float& rotationRateRadPerSec );
 
@@ -71,6 +72,7 @@ public:
     void MoveController() override;
 
 private:
+
     RotateController( const RotateController& other );
 
     Controller* Replicate() const override;
