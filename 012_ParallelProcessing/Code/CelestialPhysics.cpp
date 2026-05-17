@@ -30,6 +30,8 @@
 
 #include <C4World.h>
 
+// kJobNonpersistent tells the engine to automatically destroy the job after execution. Since we create new jobs every frame, manual
+// lifetime management is unnecessary.
 SimulationJob::SimulationJob( ExecuteCallback* execCallback, void* cookie, Range<int32> bodyIndexRange ) :
     BatchJob( execCallback, cookie, kJobNonpersistent ),
     bodyIndexRange( bodyIndexRange )
@@ -42,21 +44,11 @@ CelestialPhysicsController::CelestialPhysicsController() : Controller( kControll
 }
 
 
-// This is the core computational function (kernel). We will be executing multiple of these in parallel per frame
+// Core simulation kernel. Multiple instances of this function execute in parallel each frame.
 void CelestialPhysicsController::SimulateGalaxy( Job* job, void* cookie )
 {
-    // This function is static and does not have access to 'this'.
-    //
-    // To work around that, we pass a generic pointer ("cookie") when the job is
-    // created. This pointer stores the CelestialPhysicsController instance.
-    //
-    // Here we cast it back so we can access the controller's data (bodyArray,
-    // simulation parameters, etc.).
-    //
-    // This pattern allows the job system to remain generic: the cookie can point
-    // to any user-defined context, but in this case it is always a
-    // CelestialPhysicsController instance.
-
+    // Jobs execute static functions, so they cannot access 'this' directly. We pass the controller instance through the generic "cookie"
+    // pointer and cast it back to CelestialPhysicsController here.
     CelestialPhysicsController* controller = static_cast<CelestialPhysicsController*>( cookie );
 
     if ( !controller )
@@ -64,16 +56,16 @@ void CelestialPhysicsController::SimulateGalaxy( Job* job, void* cookie )
         return;
     }
 
-
-    // This simulation is using Modified Newton Dynamics (https://en.wikipedia.org/wiki/Modified_Newtonian_dynamics)
-    // to account for the apparent missing matter in galactic scale dynamics. This is an alternative to Dark Matter theories.
-    // We are not using physical units anywhere in these simulations.
+    // This simulation uses Modified Newtonian Dynamics (MOND), an alternative to dark matter models at galactic scales.
+    // The simulation uses arbitrary units rather than real world units.
     SimulationJob* simulationJob = static_cast<SimulationJob*>( job );
 
-    const Range<int32>& range     = simulationJob->bodyIndexRange;
-    const int32         bodyCount = controller->bodyArray.GetArrayElementCount();
+    // Range of bodies processed by this worker thread.
+    const Range<int32>& range = simulationJob->GetBodyIndexRange();
 
-    for ( int32 a = range.min; a < range.max; ++a )
+    const int32 bodyCount = controller->bodyArray.GetArrayElementCount();
+
+    for ( int32 a = range.min; a < range.max; a++ )
     {
         CelestialBody& bodyA = controller->bodyArray[ a ];
         if ( bodyA.mass <= 0.0F )
@@ -124,71 +116,58 @@ void CelestialPhysicsController::MoveController()
     }
 
     // IMPORTANT:
-    // This entire simulation runs once per frame. The C4 Engine job system is designed around a per-frame batch execution model.
-    // For long-running or independent tasks (e.g. network services or file system watchers), use a dedicated C4::Thread instead of the job
-    // system.
-    // The galaxy simulation is the most expensive part of the update because every body gravitationally interacts with every other body
-    // (O(N²) cost).
-    // All code below runs each frame before the integration step (velocity/position updates), ensuring that each frame uses freshly
-    // computed accelerations.
-    // To improve performance, the workload is split across multiple worker threads. Each thread processes a subset ("chunk") of the bodies
-    // independently.
+    // The C4 Engine job system is designed for short-lived per-frame work. Long-running independent systems ( for example network services,
+    // file watchers, pathfinding workers, etc.) should use dedicated C4::Thread instances.
+    //
+    // Every body interacts gravitationally with every other body, giving the simulation an O(N²) computational cost.
+    //
+    // To parallelize the workload, the bodies are divided into chunks and processed independently across worker threads.
     //
     // Example:
-    //
     //   Job 0 -> bodies [0 ... 249]
     //   Job 1 -> bodies [250 ... 499]
     //   Job 2 -> bodies [500 ... 749]
-    //
-    // Each job computes accelerations independently in parallel.
 
-
-    // Get the number of worker threads available in the engine. We clamp to at least 1 so the simulation still works even if threading is
-    // disabled or unavailable.
+    // Clamp to at least one worker so the simulation still runs when multithreading is unavailable.
     const int32 workerCount = Max( TheThreadMgr->GetWorkerThreadCount(), 1 );
 
-
-    // We never want more jobs than bodies. For example: 4 bodies + 16 workers, would create many empty jobs, which wastes scheduling
-    // overhead. So we cap the job count to the number of bodies.
+    // We never want more jobs than bodies. For example:4 bodies + 16 workers would create many empty jobs, which only adds scheduling
+    // overhead.
     const int32 jobCount = Min( workerCount, bodyCount );
 
-
-    // Compute how many bodies each job should process.This uses integer ceil-division so all bodies are covered even when
-    // the division is uneven. Example: 1000 bodies / 6 jobs becomes: chunkSize = 167, so the final job simply processes fewer bodies.
+    // Compute the number of bodies per job using integer ceil-division. This guarantees all bodies are assigned even when the division is
+    // uneven.
     const int32 chunkSize = ( bodyCount + jobCount - 1 ) / jobCount;
 
-
-    // Create and submit jobs.
-    //
-    // Each job receives a range: [begin, end) where 'begin' is inclusive, 'end' is exclusive. Example:
-    //   Range(0, 100)
-    // processes bodies:
-    //   0 -> 99
-    //
+    // Create and submit jobs. Each job receives a half-open range: [begin, end), where 'begin' is inclusive and 'end' is exclusive.
+    // Example:
+    // Range(0, 100) processes bodies 0 through 99.
     for ( int32 begin = 0; begin < bodyCount; begin += chunkSize )
     {
-        // Clamp the end so we never go past the array size.
+        // Clamp the end index so we never exceed the array bounds.
         const int32 end = Min( begin + chunkSize, bodyCount );
 
-        // Create a simulation job responsible for this body range. Notice that the function that is responsible for
-        // the computatuion is a static member. We are passing a "cookie" ('this' here), that the function will
-        // use to retrieve additional data.
+        // Create a simulation job responsible for this body range. The computation function is static, so we pass 'this' through the cookie
+        // pointer for context access.
         SimulationJob* job = new SimulationJob( &SimulateGalaxy, this, Range<int32>( begin, end ) );
 
-        // Submit the job to the engine's worker thread system. The engine schedules these jobs to run in parallel, and assosicates them
-        // with the simulationBatch.
+        // Submit the job to the engine's worker thread system. The engine schedules these jobs in parallel and associates them with the
+        // simulation batch.
         TheThreadMgr->SubmitJob( job, &simulationBatch );
     }
 
-    // Wait for all jobs in this batch to complete. This is a blocking synchronization point. It ensures that all acceleration computations
-    // are finished before we proceed to the integration step (velocity and position updates).
+    // Block until all simulation jobs in this batch complete. Acceleration data must be fully computed before integration begins.
     TheThreadMgr->FinishBatch( &simulationBatch );
 
-    // Finally we integrate using symplectic Euler
+    // Integrate using Symplectic Euler.
     const float dt = float( TheTimeMgr->GetDeltaTime() );
+
     for ( auto& body : bodyArray )
     {
+        // Symplectic Euler: First update velocity from acceleration...
         body.velocity += body.acceleration * dt;
+
+        // ...then update position using the new velocity.
         body.position += body.velocity * dt;
 
         body.geometry->SetNodePosition( body.position );

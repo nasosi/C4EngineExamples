@@ -25,30 +25,55 @@
 // to said work. You need to ensure that your use of this software is compatible
 // with the license of any other work that may be part of this software.
 
-
 #pragma once
-
 
 #include <C4Controller.h>
 #include <C4Threads.h>
 
-constexpr float defaultStarSystemDensity  = 100.0f; // Mass density of a star system
-constexpr float galacticCoreMass          = 200.0f;
-constexpr float galacticDiskRadius        = 150.0f;
-constexpr float galacticBulgeRadius       = 15.0f;
-constexpr float initalVelocityDistCuttoff = 1.0f; // Systems closer than 1.0f, will have an initial velocity of 0.0f.
-constexpr float maxOrbitalSpeed          = 0.05f;
-constexpr float missingMassScaleRadiusSq = 10000.0f; // Controls initial conditions behavior for stars away from the galactic center
-constexpr float gravitationalConstant    = 1e-8f; // G
-constexpr float softeningLengthSq        = 0.2f; // A softening factor to avoid singularities when stars are very close to each other.
-constexpr float a0                       = 1e-6f; // MOdified Newton Dynamics (MOND) scale.
-constexpr int   numStars                 = 6000;
+
+// Approximate mass density assigned to generated star systems.
+constexpr float defaultStarSystemDensity = 100.0f;
+
+// Mass assigned to the galactic core region.
+constexpr float galacticCoreMass = 200.0f;
+
+// Approximate radius of the visible galactic disk.
+constexpr float galacticDiskRadius = 150.0f;
+
+// Radius of the dense central bulge.
+constexpr float galacticBulgeRadius = 15.0f;
+
+// Bodies closer than this distance to the center begin with zero initial velocity.
+// This prevents unstable orbital speeds very close to the core.
+constexpr float initialVelocityDistCutoff = 1.0f;
+
+// Maximum initial orbital speed assigned to generated bodies.
+constexpr float maxOrbitalSpeed = 0.05f;
+
+// Controls how orbital velocity falls off with distance from the galactic center.
+// Larger values produce flatter galactic rotation curves.
+constexpr float missingMassScaleRadiusSq = 10000.0f;
+
+// Gravitational constant used by the simulation.
+// The simulation uses arbitrary units rather than real-world units.
+constexpr float gravitationalConstant = 1e-8f;
+
+// Small softening factor added to distance calculations to avoid
+// singularities and extremely large forces at short distances.
+constexpr float softeningLengthSq = 0.2f;
+
+// MOND acceleration scale parameter.
+constexpr float a0 = 1e-6f;
+
+// Number of simulated star systems.
+constexpr int numStars = 6000;
 
 
 namespace C4
 {
-    class SphereGeometry; // We forward declare SphereGeometry so that we don't include the header
-}
+    // Forward declaration avoids including the full geometry header here, reducing compile-time dependencies.
+    class SphereGeometry;
+} // namespace C4
 
 
 using namespace C4;
@@ -59,47 +84,62 @@ enum : ControllerType
 };
 
 
-class SimulationJob final : public BatchJob
-{
-private:
-
-
-public:
-
-    SimulationJob( ExecuteCallback* execCallback, void* cookie, Range<int32> bodyIndexRange );
-    ~SimulationJob() = default;
-
-    Range<int32> bodyIndexRange;
-};
-
-
+// Controller responsible for updating the galaxy simulation each frame.
 class CelestialPhysicsController : public Controller
 {
 private:
 
-    // We could use a Strcture of Arrays approach (SoAs), but we won't see any benefit unless we also implement other changes
-    // For the current example we will keep things simple.
-    struct CelestialBody
+    // Represents a single simulated celestial body. A Structure of Arrays (SoA) layout could improve cache efficiency, but for this
+    // example we keep the data layout simple and readable.
+    struct alignas( 64 ) CelestialBody
     {
         SphereGeometry* geometry;
-        float           mass;
-        Vector3D        velocity;
 
-        alignas( 64 ) Point3D position;
-        alignas( 64 ) Vector3D acceleration;
+        float    mass;
+        Vector3D velocity;
+
+        Point3D  position;
+        Vector3D acceleration;
     };
 
+    // All simulated bodies in the galaxy.
     Array<CelestialBody> bodyArray;
 
-    Batch       simulationBatch; // The batch to associate our jobs with each other
+    // Batch used to group all simulation jobs submitted during a frame.
+    Batch simulationBatch;
+
+    // Main parallel simulation kernel executed by each worker thread.
     static void SimulateGalaxy( Job* job, void* cookie );
 
 public:
 
     CelestialPhysicsController();
 
-    // Called on every frame. We will use this to submit the per frame jobs.
+    // Called once per frame to advance the simulation.
     void MoveController() override;
 
+    // Adds a new body to the simulation.
     void AddBody( SphereGeometry* geom, float mass, const Vector3D& velocity );
+};
+
+
+// Job object representing work assigned to a worker thread.
+class SimulationJob final : public BatchJob
+{
+private:
+
+    // Half-open range [min, max) of bodies processed by this job.
+    Range<int32> bodyIndexRange;
+
+public:
+
+    // execCallback: Function executed by the worker thread. bodyIndexRange: Portion of the body array assigned to this job.
+    SimulationJob( ExecuteCallback* execCallback, void* cookie, Range<int32> bodyIndexRange );
+
+    ~SimulationJob() = default;
+
+    const Range<int32>& GetBodyIndexRange() const
+    {
+        return bodyIndexRange;
+    }
 };

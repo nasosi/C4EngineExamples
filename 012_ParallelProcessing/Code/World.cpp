@@ -97,7 +97,7 @@ void GameWorld::SetupCelestialSimulation( int num )
     // The Controller will be the main physics simulator engine and responsible submitting jobs for parallel processing every frame.
     CelestialPhysicsController* controller = new CelestialPhysicsController();
 
-    // This Node will be responsible for the whole physics simulations. Its main purpose is to carry the CelestialPhysicsController
+    // This Node will be responsible for the whole physics simulations. Its main purpose is to hold the CelestialPhysicsController
     Node* CelestialPhysicsNode = new Node();
     CelestialPhysicsNode->SetController( controller );
 
@@ -105,13 +105,10 @@ void GameWorld::SetupCelestialSimulation( int num )
     auto AddStar = [ & ]( float density, float mass, const Vector3D& position, Vector3D velocity )
     {
         float radius = Pow( 3.0f * mass / ( Math::four_pi * density ), 1.0f / 3.0f );
-
-        auto star = new SphereGeometry( Vector3D( radius, radius, radius ) );
-
+        auto  star   = new SphereGeometry( Vector3D( radius, radius, radius ) );
         star->SetNodePosition( Point3D( position ) );
 
         SphereGeometryObject* object = star->GetObject();
-
         object->SetCollisionExclusionMask( kCollisionExcludeAll );
         object->BuildPrimitive( star );
         object->SetGeometryFlags( object->GetGeometryFlags() | kGeometryDynamic );
@@ -130,11 +127,11 @@ void GameWorld::SetupCelestialSimulation( int num )
         Vector3D pos;
         float    mass;
 
-        if ( r < 0.02f )
+        if ( r < galacticBulgeRadius / galacticDiskRadius )
         { // Bulge of the galaxy
             float distanceFromCenter = galacticBulgeRadius * Pow( RandomFloat( 0.0f, 1.0f ), 2.0f );
             pos                      = distanceFromCenter * RandomUnitVector3D();
-            mass                     = RandomFloat( 200.0f, 400.0f ); // heavier stars in core
+            mass                     = RandomFloat( 100.0f, 400.0f ); // heavier stars in core
         }
         else
         { // Main disk of the galaxy
@@ -142,13 +139,13 @@ void GameWorld::SetupCelestialSimulation( int num )
             float distanceFromCenter = -galacticDiskRadius * Log( 1.0f - RandomFloat( 0.0f, 1.0f ) );
             float azimuth            = RandomFloat( 0.0f, Math::two_pi );
             pos  = Vector3D( Cos( azimuth ) * distanceFromCenter, Sin( azimuth ) * distanceFromCenter, RandomFloat( -0.02f, 0.02f ) );
-            mass = 100.0f * Pow( RandomFloat( 0.0f, 1.0f ), 3.0f ) + 0.02f;
+            mass = 80.0f * Pow( RandomFloat( 0.0f, 1.0f ), 3.0f ) + 0.02f;
         }
 
         Vector3D velocity       = Vector3D::zero;
         float    planarDistance = Magnitude( pos.xy );
 
-        if ( planarDistance > initalVelocityDistCuttoff )
+        if ( planarDistance > initialVelocityDistCutoff )
         {
             Vector3D tangent( -pos.y, pos.x, 0.0f );
             tangent.Normalize();
