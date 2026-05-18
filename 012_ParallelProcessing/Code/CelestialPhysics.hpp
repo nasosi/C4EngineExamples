@@ -31,7 +31,7 @@
 
 
 // Number of generated star systems in the simulation.
-constexpr int numStars = 6000;
+constexpr int numStars = 5000;
 
 // Gravitational constant used by the simulation. The simulation operates in arbitrary units.
 constexpr float gravitationalConstant = 1e-8f;
@@ -69,18 +69,16 @@ constexpr float galacticDiskThickness = 10.0f;
 constexpr float randomEpsilon = 1.0e-6f;
 
 // Bodies closer than this distance to the galactic center begin with zero initial orbital velocity.
-constexpr float initialVelocityDistCutoff = 1.0f;
+constexpr float initialVelocityDistSqCutoff = 1.0f;
 
 // Maximum orbital speed used when initializing star velocities.
 constexpr float maxOrbitalSpeed = 0.05f;
 
 // Scale parameter used in the orbital velocity equation. Larger values produce flatter galactic rotation curves.
-constexpr float missingMassScaleRadiusSq = 10000.0f;
-
+constexpr float missingMassScaleRadiusSq = 2000.0f;
 
 // Distance softening term added to gravitational calculations to avoid singularities and excessively large forces.
 constexpr float softeningLengthSq = 0.2f;
-
 
 
 namespace C4
@@ -103,8 +101,8 @@ class CelestialPhysicsController : public Controller
 {
 private:
 
-    // Represents a single simulated celestial body. A Structure of Arrays (SoA) layout could improve cache efficiency, but for this
-    // example we keep the data layout simple and readable.
+    // Represents a single simulated celestial body. Different layouts could improve cache efficiency, but for this example we keep the data
+    // layout simple and readable.
     struct alignas( 64 ) CelestialBody
     {
         SphereGeometry* geometry;
@@ -129,7 +127,7 @@ public:
 
     CelestialPhysicsController();
 
-    // Called once per frame to advance the simulation.
+    // Called once per frame to by the C4 Engine. We use it to schedule the simulation jobs..
     void MoveController() override;
 
     // Adds a new body to the simulation.

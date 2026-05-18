@@ -107,6 +107,7 @@ void CelestialPhysicsController::SimulateGalaxy( Job* job, void* cookie )
 }
 
 
+ // Called once per frame to by the C4 Engine. We use it to schedule the simulation jobs.
 void CelestialPhysicsController::MoveController()
 {
     const int32 bodyCount = bodyArray.GetArrayElementCount();

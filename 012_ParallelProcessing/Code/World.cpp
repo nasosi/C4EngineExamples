@@ -88,22 +88,23 @@ GameWorld::~GameWorld()
 {
 }
 
+// This function setups the geometries and other properties of the bodies for the celestial simulation.
 void GameWorld::SetupCelestialSimulation( int numBodies )
 {
     using namespace Random;
 
     struct StarProperties
     {
-        Vector3D position = Vector3D::zero;
-        float    mass     = 0.0f;
+        Vector3D position;
+        float    mass;
     };
 
 
     auto ComputeOrbitalVelocity = []( const Vector3D& position ) -> Vector3D
     {
-        const float planarDistanceSq = position.x * position.x + position.y * position.y;
+        const float planarDistanceSq = Dot( position.xy, position.xy );
 
-        if ( planarDistanceSq <= initialVelocityDistCutoff * initialVelocityDistCutoff )
+        if ( planarDistanceSq <= initialVelocityDistSqCutoff )
         {
             return Vector3D::zero;
         }
@@ -121,9 +122,8 @@ void GameWorld::SetupCelestialSimulation( int numBodies )
 
     auto GenerateStarProperties = [ & ]() -> StarProperties
     {
+        const float r                = RandomFloat( 0.0f, 1.0f );
         const float bulgeProbability = galacticBulgeRadius / galacticDiskRadius;
-
-        const float r = RandomFloat( 0.0f, 1.0f );
 
         // Bulge stars are biased toward larger masses and spherical distribution.
         if ( r < bulgeProbability )
@@ -146,7 +146,8 @@ void GameWorld::SetupCelestialSimulation( int numBodies )
         properties.position = Vector3D( Cos( azimuth ) * distanceFromCenter,
                                         Sin( azimuth ) * distanceFromCenter,
                                         RandomFloat( -galacticDiskThickness, galacticDiskThickness ) );
-        properties.mass     = galacticDiskMassScale * Pow( RandomFloat( 0.0f, 1.0f ), 3.0f ) + galacticDiskMinMass;
+
+        properties.mass = galacticDiskMassScale * Pow( RandomFloat( 0.0f, 1.0f ), 3.0f ) + galacticDiskMinMass;
 
         return properties;
     };
@@ -155,21 +156,19 @@ void GameWorld::SetupCelestialSimulation( int numBodies )
     // the physics node.
     CelestialPhysicsController* controller = new CelestialPhysicsController();
 
-    // Root node for the celestial physics simulation system. Ownership is transferred to the world through AddNewNode().
-    auto* celestialPhysicsNode = new Node();
-    celestialPhysicsNode->SetController( controller );
-
     auto AddStar = [ & ]( float density, float mass, const Vector3D& position, const Vector3D& velocity )
     {
         const float radius = Pow( 3.0f * mass / ( Math::four_pi * density ), 1.0f / 3.0f );
 
-        auto* star = new SphereGeometry( Vector3D( radius, radius, radius ) );
+        SphereGeometry* star = new SphereGeometry( Vector3D( radius, radius, radius ) );
         star->SetNodePosition( Point3D( position ) );
 
         SphereGeometryObject* object = star->GetObject();
         object->SetCollisionExclusionMask( kCollisionExcludeAll );
         object->BuildPrimitive( star );
         object->SetGeometryFlags( object->GetGeometryFlags() | kGeometryDynamic );
+
+        // The controller is updating the position of the stars at each simulation step. 
         controller->AddBody( star, mass, velocity );
 
 
@@ -186,6 +185,9 @@ void GameWorld::SetupCelestialSimulation( int numBodies )
         AddStar( defaultStarSystemDensity, properties.mass, properties.position, ComputeOrbitalVelocity( properties.position ) );
     }
 
+    // Root node for the celestial physics simulation system. Ownership is transferred to the world through AddNewNode().
+    Node* celestialPhysicsNode = new Node();
+    celestialPhysicsNode->SetController( controller );
     AddNewNode( celestialPhysicsNode );
 }
 
