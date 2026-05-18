@@ -28,45 +28,59 @@
 #pragma once
 
 #include <C4Controller.h>
-#include <C4Threads.h>
 
 
-// Approximate mass density assigned to generated star systems.
-constexpr float defaultStarSystemDensity = 100.0f;
+// Number of generated star systems in the simulation.
+constexpr int numStars = 6000;
 
-// Mass assigned to the galactic core region.
-constexpr float galacticCoreMass = 200.0f;
-
-// Approximate radius of the visible galactic disk.
-constexpr float galacticDiskRadius = 150.0f;
-
-// Radius of the dense central bulge.
-constexpr float galacticBulgeRadius = 15.0f;
-
-// Bodies closer than this distance to the center begin with zero initial velocity.
-// This prevents unstable orbital speeds very close to the core.
-constexpr float initialVelocityDistCutoff = 1.0f;
-
-// Maximum initial orbital speed assigned to generated bodies.
-constexpr float maxOrbitalSpeed = 0.05f;
-
-// Controls how orbital velocity falls off with distance from the galactic center.
-// Larger values produce flatter galactic rotation curves.
-constexpr float missingMassScaleRadiusSq = 10000.0f;
-
-// Gravitational constant used by the simulation.
-// The simulation uses arbitrary units rather than real-world units.
+// Gravitational constant used by the simulation. The simulation operates in arbitrary units.
 constexpr float gravitationalConstant = 1e-8f;
 
-// Small softening factor added to distance calculations to avoid
-// singularities and extremely large forces at short distances.
-constexpr float softeningLengthSq = 0.2f;
-
-// MOND acceleration scale parameter.
+// MOND acceleration scale parameter used by the gravity model.
 constexpr float a0 = 1e-6f;
 
-// Number of simulated star systems.
-constexpr int numStars = 6000;
+// Approximate density used when deriving the visual radius of generated star systems from their mass.
+constexpr float defaultStarSystemDensity = 200.0f;
+
+// Mass of the stationary galactic core body placed at the origin.
+constexpr float galacticCoreMass = 200.0f;
+
+// Characteristic radius used when sampling stars in the galactic disk distribution.
+constexpr float galacticDiskRadius = 150.0f;
+
+// Radius of the central bulge region used for spherical star sampling.
+constexpr float galacticBulgeRadius = 10.0f;
+
+// Mass range assigned to stars generated in the galactic bulge.
+constexpr float galacticBulgeMinMass = 100.0f;
+constexpr float galacticBulgeMaxMass = 400.0f;
+
+// Scale factor applied to disk star mass generation.
+constexpr float galacticDiskMassScale = 80.0f;
+
+// Minimum mass assigned to generated disk stars.
+constexpr float galacticDiskMinMass = 0.02f;
+
+// Maximum vertical displacement from the galactic plane
+// used when generating disk stars.
+constexpr float galacticDiskThickness = 10.0f;
+
+// Small epsilon used to avoid numerical issues.
+constexpr float randomEpsilon = 1.0e-6f;
+
+// Bodies closer than this distance to the galactic center begin with zero initial orbital velocity.
+constexpr float initialVelocityDistCutoff = 1.0f;
+
+// Maximum orbital speed used when initializing star velocities.
+constexpr float maxOrbitalSpeed = 0.05f;
+
+// Scale parameter used in the orbital velocity equation. Larger values produce flatter galactic rotation curves.
+constexpr float missingMassScaleRadiusSq = 10000.0f;
+
+
+// Distance softening term added to gravitational calculations to avoid singularities and excessively large forces.
+constexpr float softeningLengthSq = 0.2f;
+
 
 
 namespace C4

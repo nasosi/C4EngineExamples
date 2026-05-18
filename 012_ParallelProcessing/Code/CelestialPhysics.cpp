@@ -28,7 +28,7 @@
 
 #include "CelestialPhysics.hpp"
 
-#include <C4World.h>
+#include <C4Primitives.h>
 
 
 // kJobNonpersistent tells the engine to automatically destroy the job after execution. Since we create new jobs every frame, manual
@@ -117,7 +117,7 @@ void CelestialPhysicsController::MoveController()
     }
 
     // IMPORTANT:
-    // The C4 Engine job system is designed for short-lived per-frame work. Long-running independent systems ( for example network services,
+    // The C4 Engine job system is designed for short-lived per-frame work. Long-running independent systems (for example network services,
     // file watchers, pathfinding workers, etc.) should use dedicated C4::Thread instances.
     //
     // Every body interacts gravitationally with every other body, giving the simulation an O(N²) computational cost.

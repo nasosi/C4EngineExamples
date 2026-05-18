@@ -36,9 +36,6 @@
 using namespace C4;
 
 
-class CelestialPhysicsController;
-
-
 class GameWorld : public World
 {
 private:
@@ -46,7 +43,7 @@ private:
     SpectatorCamera spectatorCamera;
     void            SetupSpectatorCamera();
 
-    void SetupCelestialSimulation( int num );
+    void SetupCelestialSimulation( int numBodies );
 
 public:
 

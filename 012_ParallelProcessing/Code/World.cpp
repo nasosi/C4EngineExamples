@@ -28,9 +28,7 @@
 
 #include "World.hpp"
 #include "CelestialPhysics.hpp"
-#include "Game.hpp"
 
-#include "C4Computation.h"
 
 const Point3D   cameraDefaultPosition    = Point3D( 0.0f, 0.0f, 1.7f );
 constexpr float cameraFoV_deg            = 65.0f;
@@ -90,75 +88,107 @@ GameWorld::~GameWorld()
 {
 }
 
-void GameWorld::SetupCelestialSimulation( int num )
+void GameWorld::SetupCelestialSimulation( int numBodies )
 {
     using namespace Random;
 
-    // The Controller will be the main physics simulator engine and responsible submitting jobs for parallel processing every frame.
+    struct StarProperties
+    {
+        Vector3D position = Vector3D::zero;
+        float    mass     = 0.0f;
+    };
+
+
+    auto ComputeOrbitalVelocity = []( const Vector3D& position ) -> Vector3D
+    {
+        const float planarDistanceSq = position.x * position.x + position.y * position.y;
+
+        if ( planarDistanceSq <= initialVelocityDistCutoff * initialVelocityDistCutoff )
+        {
+            return Vector3D::zero;
+        }
+
+        const float planarDistance = Sqrt( planarDistanceSq );
+
+        Vector3D tangent( -position.y, position.x, 0.0f );
+        tangent.Normalize();
+
+        const float orbitalSpeed = maxOrbitalSpeed * planarDistance / Sqrt( planarDistanceSq + missingMassScaleRadiusSq );
+
+        return tangent * orbitalSpeed;
+    };
+
+
+    auto GenerateStarProperties = [ & ]() -> StarProperties
+    {
+        const float bulgeProbability = galacticBulgeRadius / galacticDiskRadius;
+
+        const float r = RandomFloat( 0.0f, 1.0f );
+
+        // Bulge stars are biased toward larger masses and spherical distribution.
+        if ( r < bulgeProbability )
+        {
+            const float distanceFromCenter = galacticBulgeRadius * Pow( RandomFloat( 0.0f, 1.0f ), 2.0f );
+
+            StarProperties properties;
+            properties.position = distanceFromCenter * RandomUnitVector3D();
+            properties.mass     = RandomFloat( galacticBulgeMinMass, galacticBulgeMaxMass );
+
+            return properties;
+        }
+
+        // Disk stars follow an exponential radial distribution.Clamp the random sample to avoid log( 0 ) and extreme outliers.
+        const float u                  = Clamp( RandomFloat( 0.0f, 1.0f ), randomEpsilon, 1.0f - randomEpsilon );
+        const float distanceFromCenter = -galacticDiskRadius * Log( 1.0f - u );
+        const float azimuth            = RandomFloat( 0.0f, Math::two_pi );
+
+        StarProperties properties;
+        properties.position = Vector3D( Cos( azimuth ) * distanceFromCenter,
+                                        Sin( azimuth ) * distanceFromCenter,
+                                        RandomFloat( -galacticDiskThickness, galacticDiskThickness ) );
+        properties.mass     = galacticDiskMassScale * Pow( RandomFloat( 0.0f, 1.0f ), 3.0f ) + galacticDiskMinMass;
+
+        return properties;
+    };
+
+    // The controller is responsible for submitting and managing celestial physics simulation jobs each frame. Ownership is transferred to
+    // the physics node.
     CelestialPhysicsController* controller = new CelestialPhysicsController();
 
-    // This Node will be responsible for the whole physics simulations. Its main purpose is to hold the CelestialPhysicsController
-    Node* CelestialPhysicsNode = new Node();
-    CelestialPhysicsNode->SetController( controller );
+    // Root node for the celestial physics simulation system. Ownership is transferred to the world through AddNewNode().
+    auto* celestialPhysicsNode = new Node();
+    celestialPhysicsNode->SetController( controller );
 
-    // A function to create stars for our simulation
-    auto AddStar = [ & ]( float density, float mass, const Vector3D& position, Vector3D velocity )
+    auto AddStar = [ & ]( float density, float mass, const Vector3D& position, const Vector3D& velocity )
     {
-        float radius = Pow( 3.0f * mass / ( Math::four_pi * density ), 1.0f / 3.0f );
-        auto  star   = new SphereGeometry( Vector3D( radius, radius, radius ) );
+        const float radius = Pow( 3.0f * mass / ( Math::four_pi * density ), 1.0f / 3.0f );
+
+        auto* star = new SphereGeometry( Vector3D( radius, radius, radius ) );
         star->SetNodePosition( Point3D( position ) );
 
         SphereGeometryObject* object = star->GetObject();
         object->SetCollisionExclusionMask( kCollisionExcludeAll );
         object->BuildPrimitive( star );
         object->SetGeometryFlags( object->GetGeometryFlags() | kGeometryDynamic );
-
         controller->AddBody( star, mass, velocity );
+
 
         AddNewNode( star );
     };
 
+    // The galaxy core mass
+    AddStar( defaultStarSystemDensity, galacticCoreMass, Point3D::zero, Vector3D::zero );
 
-    AddStar( defaultStarSystemDensity, galacticCoreMass, Point3D( Point3D::zero ), Vector3D::zero );
-
-    while ( num-- > 0 )
+    while ( numBodies-- > 0 )
     {
-        float    r = RandomFloat( 0.0f, 1.0f );
-        Vector3D pos;
-        float    mass;
+        const StarProperties properties = GenerateStarProperties();
 
-        if ( r < galacticBulgeRadius / galacticDiskRadius )
-        { // Bulge of the galaxy
-            float distanceFromCenter = galacticBulgeRadius * Pow( RandomFloat( 0.0f, 1.0f ), 2.0f );
-            pos                      = distanceFromCenter * RandomUnitVector3D();
-            mass                     = RandomFloat( 100.0f, 400.0f ); // heavier stars in core
-        }
-        else
-        { // Main disk of the galaxy
-
-            float distanceFromCenter = -galacticDiskRadius * Log( 1.0f - RandomFloat( 0.0f, 1.0f ) );
-            float azimuth            = RandomFloat( 0.0f, Math::two_pi );
-            pos  = Vector3D( Cos( azimuth ) * distanceFromCenter, Sin( azimuth ) * distanceFromCenter, RandomFloat( -0.02f, 0.02f ) );
-            mass = 80.0f * Pow( RandomFloat( 0.0f, 1.0f ), 3.0f ) + 0.02f;
-        }
-
-        Vector3D velocity       = Vector3D::zero;
-        float    planarDistance = Magnitude( pos.xy );
-
-        if ( planarDistance > initialVelocityDistCutoff )
-        {
-            Vector3D tangent( -pos.y, pos.x, 0.0f );
-            tangent.Normalize();
-            float orbitalSpeed = maxOrbitalSpeed * planarDistance / Sqrt( planarDistance * planarDistance + missingMassScaleRadiusSq );
-            velocity           = tangent * orbitalSpeed;
-        }
-
-        AddStar( defaultStarSystemDensity, mass, pos, velocity );
+        AddStar( defaultStarSystemDensity, properties.mass, properties.position, ComputeOrbitalVelocity( properties.position ) );
     }
 
-    // We add the physics node to our world here.
-    AddNewNode( CelestialPhysicsNode );
+    AddNewNode( celestialPhysicsNode );
 }
+
 
 WorldResult GameWorld::PreprocessWorld()
 {
